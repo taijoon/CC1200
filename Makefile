@@ -1,4 +1,4 @@
 COMPONENT=BlinkAppC
-CFLAGS += -I./cc2420
+CFLAGS += -I./cc1200
 include $(MAKERULES)
 
