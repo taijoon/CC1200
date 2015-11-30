@@ -15,22 +15,22 @@
  */
 #include "Timer.h"
 #include "Oscilloscope.h"
+#include "cc120x_spi.h"
 
 module OscilloscopeC @safe()
 {
   uses {
     interface Boot;
-    interface SplitControl as RadioControl;
-    interface AMSend;
-    interface Receive;
+    //interface SplitControl as RadioControl;
     interface Timer<TMilli>;
-    interface Read<uint16_t>;
     interface Leds;
+    //interface AMSend;
+    //interface Receive;
   }
 }
 implementation
 {
-  message_t sendBuf;
+  //message_t sendBuf;
   bool sendBusy;
 
   /* Current local state - interval, version and accumulated readings */
@@ -61,40 +61,24 @@ implementation
     local.interval = DEFAULT_INTERVAL;
     local.id = TOS_NODE_ID;
     startTimer();
-    if (call RadioControl.start() != SUCCESS)
-      ;
+//    if (call RadioControl.start() != SUCCESS)
+//      ;
   	}
-
+/*
   event void RadioControl.startDone(error_t error) {
     //startTimer();
   }
 
   event void RadioControl.stopDone(error_t error) {
   }
-
+*/
+/*
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len) {
     oscilloscope_t *omsg = payload;
-
     report_received();
-
-    /* If we receive a newer version, update our interval. 
-       If we hear from a future count, jump ahead but suppress our own change
-    */
-    if (omsg->version > local.version)
-      {
-	local.version = omsg->version;
-	local.interval = omsg->interval;
-	startTimer();
-      }
-    if (omsg->count > local.count)
-      {
-	local.count = omsg->count;
-	suppressCountChange = TRUE;
-      }
-
     return msg;
   }
-
+*/
   /* At each sample period:
      - if local sample buffer is full, send accumulated samples
      - read next sample
@@ -117,25 +101,15 @@ implementation
 			  local.count++;
 			suppressCountChange = FALSE;
     }
-//    if (call Read.read() != SUCCESS)
       reading++;
 */
   }
-
+/*
   event void AMSend.sendDone(message_t* msg, error_t error) {
     if (error == SUCCESS)
       report_sent();
 
     sendBusy = FALSE;
   }
-
-  event void Read.readDone(error_t result, uint16_t data) {
-    if (result != SUCCESS)
-      {
-				data = 0x1111;
-      }
-    if (reading < NREADINGS) 
-      //local.readings[reading++] = data;
-			local.readings[reading++] = 0x1234;
-  }
+*/
 }
