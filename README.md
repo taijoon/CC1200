@@ -4,6 +4,10 @@ Change 2420 -> 1200
 
 make telosz
 
+install Folder :
+	MSP430Flasher install file
+
+
 list
 
  1. change file name -> Done
