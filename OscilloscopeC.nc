@@ -51,20 +51,22 @@ implementation
 //  void report_received() { call Leds.led2Toggle(); }
 	void report_received() {;}
 
-  event void Boot.booted() {
-    local.interval = DEFAULT_INTERVAL;
-    local.id = TOS_NODE_ID;
-    if (call RadioControl.start() != SUCCESS)
-      ;
-  }
-
   void startTimer() {
     call Timer.startPeriodic(local.interval);
     reading = 0;
   }
 
-  event void RadioControl.startDone(error_t error) {
+  event void Boot.booted() {
+		call Leds.set(7);
+    local.interval = DEFAULT_INTERVAL;
+    local.id = TOS_NODE_ID;
     startTimer();
+    if (call RadioControl.start() != SUCCESS)
+      ;
+  	}
+
+  event void RadioControl.startDone(error_t error) {
+    //startTimer();
   }
 
   event void RadioControl.stopDone(error_t error) {
@@ -98,7 +100,8 @@ implementation
      - read next sample
   */
   event void Timer.fired() {
-    if (reading == NREADINGS){
+		call Leds.led0Toggle();
+/*    if (reading == NREADINGS){
 			if (!sendBusy && sizeof local <= call AMSend.maxPayloadLength()){
 	    // Don't need to check for null because we've already checked length
 	    // above
@@ -110,14 +113,13 @@ implementation
 				;
 
 			reading = 0;
-			/* Part 2 of cheap "time sync": increment our count if we didn't
-			   jump ahead. */
 			if (!suppressCountChange)
 			  local.count++;
 			suppressCountChange = FALSE;
     }
 //    if (call Read.read() != SUCCESS)
       reading++;
+*/
   }
 
   event void AMSend.sendDone(message_t* msg, error_t error) {
