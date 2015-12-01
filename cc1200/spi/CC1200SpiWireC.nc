@@ -6,6 +6,7 @@ configuration CC1200SpiWireC {
   provides interface CC1200Fifo as Fifo[ uint8_t id ];
   provides interface CC1200Ram as Ram[ uint16_t id ];
   provides interface CC1200Register as Reg[ uint8_t id ];
+  provides interface CC1200Register as Reg16[ uint16_t id ];
   provides interface CC1200Strobe as Strobe[ uint8_t id ];
 
 }
@@ -17,6 +18,7 @@ implementation {
   Fifo = SpiP;
   Ram = SpiP;
   Reg = SpiP;
+	Reg16 = SpiP;
   Strobe = SpiP;
   ChipSpiResource = SpiP;
 

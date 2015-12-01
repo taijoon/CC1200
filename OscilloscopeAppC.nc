@@ -25,9 +25,10 @@ implementation
     //new AMSenderC(AM_OSCILLOSCOPE), new AMReceiverC(AM_OSCILLOSCOPE);
 
   OscilloscopeC.Boot -> MainC;
-//  OscilloscopeC.RadioControl -> ActiveMessageC;
+  //OscilloscopeC.RadioControl -> ActiveMessageC;
   OscilloscopeC.Timer -> TimerMilliC;
   OscilloscopeC.Leds -> LedsC;
 //  OscilloscopeC.AMSend -> AMSenderC;
 //  OscilloscopeC.Receive -> AMReceiverC;
+
 }

@@ -44,6 +44,7 @@ generic configuration CC1200SpiC() {
   provides interface CC1200Register as AGCCTRL;
   provides interface CC1200Register as RXFIFO_REGISTER;
 
+  provides interface CC1200Register as IOCFG2;
   // ram
   provides interface CC1200Ram as IEEEADR;
   provides interface CC1200Ram as PANID;
@@ -113,6 +114,8 @@ implementation {
   MANOR = Spi.Reg[ CC1200_MANOR ];
   AGCCTRL = Spi.Reg[ CC1200_AGCCTRL ];
   RXFIFO_REGISTER = Spi.Reg[ CC1200_RXFIFO ];
+
+  IOCFG2 = Spi.Reg16[ 0x0000 ];
   
   // ram
   IEEEADR = Spi.Ram[ CC1200_RAM_IEEEADR ];

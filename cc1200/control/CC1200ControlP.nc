@@ -29,6 +29,7 @@ module CC1200ControlP @safe() {
   uses interface CC1200Register as RXCTRL1;
   uses interface CC1200Register as RSSI;
   uses interface CC1200Register as TXCTRL;
+  uses interface CC1200Register as IOCFG2;
   uses interface CC1200Strobe as SRXON;
   uses interface CC1200Strobe as SRFOFF;
   uses interface CC1200Strobe as SXOSCOFF;
@@ -213,7 +214,6 @@ implementation {
 
       writeTxctrl();
     }
-    return SUCCESS;
   }
 
 

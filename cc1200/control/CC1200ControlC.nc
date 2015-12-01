@@ -1,5 +1,6 @@
 
 #include "CC1200.h"
+#include "cc120x_spi.h"
 #include "IEEE802154.h"
 
 configuration CC1200ControlC {
@@ -49,6 +50,8 @@ implementation {
   CC1200ControlP.RXCTRL1 -> Spi.RXCTRL1;
   CC1200ControlP.RSSI  -> Spi.RSSI;
   CC1200ControlP.TXCTRL  -> Spi.TXCTRL;
+
+  CC1200ControlP.IOCFG2  -> Spi.IOCFG2;
 
   components new CC1200SpiC() as SyncSpiC;
   CC1200ControlP.SyncResource -> SyncSpiC;

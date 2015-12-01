@@ -62,11 +62,11 @@ implementation
     local.id = TOS_NODE_ID;
     startTimer();
 //    if (call RadioControl.start() != SUCCESS)
-//      ;
-  	}
+//			;
+  }
 /*
   event void RadioControl.startDone(error_t error) {
-    //startTimer();
+			call Leds.led1Off();
   }
 
   event void RadioControl.stopDone(error_t error) {

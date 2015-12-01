@@ -7,6 +7,7 @@ module CC1200SpiP @safe() {
     interface CC1200Fifo as Fifo[ uint8_t id ];
     interface CC1200Ram as Ram[ uint16_t id ];
     interface CC1200Register as Reg[ uint8_t id ];
+    interface CC1200Register as Reg16[ uint16_t id ];
     interface CC1200Strobe as Strobe[ uint8_t id ];
   }
   
@@ -269,12 +270,44 @@ implementation {
         return 0;
       }
     }
+		
     call SpiByte.write( addr );
     call SpiByte.write( data >> 8 );
     return call SpiByte.write( data & 0xff );
   }
 
-  
+
+  async command cc1200_status_t Reg16.read[ uint16_t addr ]( uint16_t* data ) {
+
+    cc1200_status_t status = 0;
+    
+    atomic {
+      if(call WorkingState.isIdle()) {
+        return status;
+      }
+    }
+    
+    status = call SpiByte.write( addr | 0x80 );
+    *data = (uint16_t)call SpiByte.write( 0 ) << 8;
+    *data |= call SpiByte.write( 0 );
+    
+    return status;
+
+  }
+
+  async command cc1200_status_t Reg16.write[ uint16_t addr ]( uint16_t data ) {
+    atomic {
+      if(call WorkingState.isIdle()) {
+        return 0;
+      }
+    }
+		
+    call SpiByte.write( addr );
+		if((data >> 8) != 0x00)
+    	call SpiByte.write( data >> 8 );
+    return call SpiByte.write( data & 0xff );
+  }
+
   /***************** Strobe Commands ****************/
   async command cc1200_status_t Strobe.strobe[ uint8_t addr ]() {
     atomic {

@@ -54,7 +54,6 @@ implementation {
     } else if(call SplitControlState.isState(S_STARTING)) {
       return SUCCESS;
     }
-    
     return EBUSY;
   }
 
