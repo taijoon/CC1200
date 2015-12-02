@@ -30,7 +30,7 @@ module OscilloscopeC @safe()
 }
 implementation
 {
-  //message_t sendBuf;
+  message_t sendBuf;
   bool sendBusy;
 
   /* Current local state - interval, version and accumulated readings */
@@ -48,7 +48,6 @@ implementation
   // Use LEDs to report various status issues.
   void report_problem() { call Leds.led0Toggle(); }
   void report_sent() { call Leds.led1Toggle(); }
-//  void report_received() { call Leds.led2Toggle(); }
 	void report_received() {;}
 
   void startTimer() {
@@ -61,7 +60,7 @@ implementation
     local.interval = DEFAULT_INTERVAL;
     local.id = TOS_NODE_ID;
     startTimer();
-    //if (call RadioControl.start() != SUCCESS)
+    if (call RadioControl.start() != SUCCESS)
 		//	call Leds.led1Off();
 			;
   }
@@ -84,8 +83,9 @@ implementation
   */
   event void Timer.fired() {
 		call Leds.led0Toggle();
-		if(call RadioControl.start() == SUCCESS)
-			call Leds.led2Toggle();
+	    memcpy(call AMSend.getPayload(&sendBuf, sizeof(local)), &local, sizeof local);
+	    if (call AMSend.send(AM_BROADCAST_ADDR, &sendBuf, sizeof local) == SUCCESS)
+	      sendBusy = TRUE;
 /*    if (reading == NREADINGS){
 			if (!sendBusy && sizeof local <= call AMSend.maxPayloadLength()){
 	    // Don't need to check for null because we've already checked length
