@@ -20,15 +20,15 @@ configuration OscilloscopeAppC { }
 implementation
 {
   components OscilloscopeC, MainC, LedsC,
-		//ActiveMessageC, 
-    new TimerMilliC();
-    //new AMSenderC(AM_OSCILLOSCOPE), new AMReceiverC(AM_OSCILLOSCOPE);
+		ActiveMessageC, 
+    new TimerMilliC(),
+    new AMSenderC(AM_OSCILLOSCOPE), new AMReceiverC(AM_OSCILLOSCOPE);
 
   OscilloscopeC.Boot -> MainC;
-  //OscilloscopeC.RadioControl -> ActiveMessageC;
+  OscilloscopeC.RadioControl -> ActiveMessageC;
   OscilloscopeC.Timer -> TimerMilliC;
   OscilloscopeC.Leds -> LedsC;
-//  OscilloscopeC.AMSend -> AMSenderC;
-//  OscilloscopeC.Receive -> AMReceiverC;
+  OscilloscopeC.AMSend -> AMSenderC;
+  OscilloscopeC.Receive -> AMReceiverC;
 
 }

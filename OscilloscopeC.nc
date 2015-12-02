@@ -21,11 +21,11 @@ module OscilloscopeC @safe()
 {
   uses {
     interface Boot;
-    //interface SplitControl as RadioControl;
+    interface SplitControl as RadioControl;
     interface Timer<TMilli>;
     interface Leds;
-    //interface AMSend;
-    //interface Receive;
+    interface AMSend;
+    interface Receive;
   }
 }
 implementation
@@ -61,30 +61,31 @@ implementation
     local.interval = DEFAULT_INTERVAL;
     local.id = TOS_NODE_ID;
     startTimer();
-//    if (call RadioControl.start() != SUCCESS)
-//			;
+    //if (call RadioControl.start() != SUCCESS)
+		//	call Leds.led1Off();
+			;
   }
-/*
+
   event void RadioControl.startDone(error_t error) {
-			call Leds.led1Off();
   }
 
   event void RadioControl.stopDone(error_t error) {
   }
-*/
-/*
+
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len) {
     oscilloscope_t *omsg = payload;
     report_received();
     return msg;
   }
-*/
+
   /* At each sample period:
      - if local sample buffer is full, send accumulated samples
      - read next sample
   */
   event void Timer.fired() {
 		call Leds.led0Toggle();
+		if(call RadioControl.start() == SUCCESS)
+			call Leds.led2Toggle();
 /*    if (reading == NREADINGS){
 			if (!sendBusy && sizeof local <= call AMSend.maxPayloadLength()){
 	    // Don't need to check for null because we've already checked length
@@ -104,12 +105,12 @@ implementation
       reading++;
 */
   }
-/*
+
   event void AMSend.sendDone(message_t* msg, error_t error) {
     if (error == SUCCESS)
       report_sent();
 
     sendBusy = FALSE;
   }
-*/
+
 }

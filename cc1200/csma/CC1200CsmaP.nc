@@ -47,7 +47,6 @@ implementation {
     if(call SplitControlState.requestState(S_STARTING) == SUCCESS) {
       call CC1200Power.startVReg();
       return SUCCESS;
-    
     } else if(call SplitControlState.isState(S_STARTED)) {
       return EALREADY;
       

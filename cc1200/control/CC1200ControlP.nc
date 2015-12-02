@@ -92,9 +92,9 @@ implementation {
   /***************** Init Commands ****************/
   command error_t Init.init() {
     int i, t;
-    call CSN.makeOutput();
-    call RSTN.makeOutput();
-    call VREN.makeOutput();
+    //call CSN.makeOutput();
+    //call RSTN.makeOutput();
+    //call VREN.makeOutput();
     
     m_short_addr = call ActiveMessageAddress.amAddress();
     m_ext_addr = call LocalIeeeEui64.getId();
@@ -172,9 +172,11 @@ implementation {
       }
       m_state = S_VREG_STARTING;
     }
-    call VREN.set();
-    call StartupTimer.start( CC1200_TIME_VREN );
-    return SUCCESS;
+
+     call IOCFG0.write( 0x22 );
+    //call VREN.set();
+    //call StartupTimer.start( CC2420_TIME_VREN );
+    return FAIL;
   }
 
   async command error_t CC1200Power.stopVReg() {
@@ -214,6 +216,7 @@ implementation {
 
       writeTxctrl();
     }
+		return SUCCESS;
   }
 
 
