@@ -34,6 +34,9 @@ module CC1200ControlP @safe() {
   uses interface CC1200Strobe as SRFOFF;
   uses interface CC1200Strobe as SXOSCOFF;
   uses interface CC1200Strobe as SXOSCON;
+
+	// TJ ADD
+  uses interface CC1200Strobe as SRES;
   
   uses interface Resource as SpiResource;
   uses interface Resource as RssiResource;
@@ -94,7 +97,7 @@ implementation {
     int i, t;
     //call CSN.makeOutput();
     //call RSTN.makeOutput();
-    //call VREN.makeOutput();
+    call VREN.makeOutput();
     
     m_short_addr = call ActiveMessageAddress.amAddress();
     m_ext_addr = call LocalIeeeEui64.getId();
@@ -172,11 +175,9 @@ implementation {
       }
       m_state = S_VREG_STARTING;
     }
-
-     call IOCFG0.write( 0x22 );
     //call VREN.set();
-    //call StartupTimer.start( CC2420_TIME_VREN );
-    return FAIL;
+    call StartupTimer.start( CC1200_TIME_VREN );
+    return SUCCESS;
   }
 
   async command error_t CC1200Power.stopVReg() {
@@ -189,10 +190,12 @@ implementation {
 
   async command error_t CC1200Power.startOscillator() {
     atomic {
+			call Leds.led1Toggle();
+			call SRES.strobe();
+/*
       if ( m_state != S_VREG_STARTED ) {
         return FAIL;
       }
-        
       m_state = S_XOSC_STARTING;
       call IOCFG1.write( CC1200_SFDMUX_XOSC16M_STABLE << 
                          CC1200_IOCFG1_CCAMUX );
@@ -215,6 +218,7 @@ implementation {
           ( 2 << CC1200_RXCTRL1_RXMIX_CURRENT ) );
 
       writeTxctrl();
+*/
     }
 		return SUCCESS;
   }

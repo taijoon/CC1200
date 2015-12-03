@@ -21,6 +21,9 @@ generic configuration CC1200SpiC() {
   provides interface CC1200Strobe as STXENC;
   provides interface CC1200Strobe as SAES;
 
+	// TJ ADD
+  provides interface CC1200Strobe as SRES;
+
   // registers
   provides interface CC1200Register as MAIN;
   provides interface CC1200Register as MDMCTRL0;
@@ -90,6 +93,9 @@ implementation {
   SRXDEC = Spi.Strobe[ CC1200_SRXDEC ];
   STXENC = Spi.Strobe[ CC1200_STXENC ];
   SAES = Spi.Strobe[ CC1200_SAES ];
+
+	// TJ ADD
+  SRES = Spi.Strobe[ CC120X_SRES ];
   
   // registers
   MAIN = Spi.Reg[ CC1200_MAIN ];

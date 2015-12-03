@@ -9,7 +9,6 @@ configuration CC1200ControlC {
   provides interface CC1200Config;
   provides interface CC1200Power;
   provides interface Read<uint16_t> as ReadRssi;
-  
 }
 
 implementation {
@@ -51,7 +50,9 @@ implementation {
   CC1200ControlP.RSSI  -> Spi.RSSI;
   CC1200ControlP.TXCTRL  -> Spi.TXCTRL;
 
-  CC1200ControlP.IOCFG2  -> Spi.IOCFG2;
+// TJ ADD
+  CC1200ControlP.SRES -> Spi.SRES;
+
 
   components new CC1200SpiC() as SyncSpiC;
   CC1200ControlP.SyncResource -> SyncSpiC;
@@ -65,5 +66,7 @@ implementation {
   components LocalIeeeEui64C;
   CC1200ControlP.LocalIeeeEui64 -> LocalIeeeEui64C;
 
+	components LedsC;
+	CC1200ControlP.Leds -> LedsC;
 }
 

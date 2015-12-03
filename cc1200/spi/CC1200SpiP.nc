@@ -255,7 +255,7 @@ implementation {
       }
     }
     
-    status = call SpiByte.write( addr | 0x40 );
+    status = call SpiByte.write( addr | 0x80 | 0x40 );
     *data = (uint16_t)call SpiByte.write( 0 ) << 8;
     *data |= call SpiByte.write( 0 );
     
@@ -270,7 +270,7 @@ implementation {
       }
     }
 		
-    call SpiByte.write( addr );
+    call SpiByte.write( 0x40 | addr );
     call SpiByte.write( data >> 8 );
     return call SpiByte.write( data & 0xff );
   }

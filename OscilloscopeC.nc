@@ -23,10 +23,13 @@ module OscilloscopeC @safe()
     interface Boot;
     interface SplitControl as RadioControl;
     interface Timer<TMilli>;
+    interface Timer<TMilli> as Timer2;
     interface Leds;
     interface AMSend;
     interface Receive;
-  }
+
+		interface HplMsp430GeneralIO as P61;
+}
 }
 implementation
 {
@@ -52,16 +55,17 @@ implementation
 
   void startTimer() {
     call Timer.startPeriodic(local.interval);
+    call Timer2.startPeriodic(100);
     reading = 0;
   }
 
   event void Boot.booted() {
 		call Leds.set(7);
+		call P61.makeInput();
     local.interval = DEFAULT_INTERVAL;
     local.id = TOS_NODE_ID;
     startTimer();
-    if (call RadioControl.start() != SUCCESS)
-		//	call Leds.led1Off();
+    //if (call RadioControl.start() != SUCCESS)
 			;
   }
 
@@ -81,11 +85,23 @@ implementation
      - if local sample buffer is full, send accumulated samples
      - read next sample
   */
+	uint8_t status = 0;
+  event void Timer2.fired() {
+		uint8_t x  = call P61.get();
+		if(x == 1 && status == 0){
+			status = 1;
+		}
+		else if(x == 0 && status == 1){
+			call RadioControl.start();
+			status = 0;
+		}
+	}
+
   event void Timer.fired() {
 		call Leds.led0Toggle();
-	    memcpy(call AMSend.getPayload(&sendBuf, sizeof(local)), &local, sizeof local);
-	    if (call AMSend.send(AM_BROADCAST_ADDR, &sendBuf, sizeof local) == SUCCESS)
-	      sendBusy = TRUE;
+//	    memcpy(call AMSend.getPayload(&sendBuf, sizeof(local)), &local, sizeof local);
+//	    if (call AMSend.send(AM_BROADCAST_ADDR, &sendBuf, sizeof local) == SUCCESS)
+//	      sendBusy = TRUE;
 /*    if (reading == NREADINGS){
 			if (!sendBusy && sizeof local <= call AMSend.maxPayloadLength()){
 	    // Don't need to check for null because we've already checked length
