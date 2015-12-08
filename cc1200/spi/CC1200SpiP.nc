@@ -255,9 +255,10 @@ implementation {
       }
     }
     
-    status = call SpiByte.write( addr | 0x80 | 0x40 );
-    *data = (uint16_t)call SpiByte.write( 0 ) << 8;
-    *data |= call SpiByte.write( 0 );
+    status = call SpiByte.write( addr | 0x80 );
+    //status = call SpiByte.write( addr | 0x80 | 0x40 );
+    //*data = (uint16_t)call SpiByte.write( 0x3D ) << 8;
+    *data |= call SpiByte.write( 0x3D );
     
     return status;
 
@@ -270,8 +271,10 @@ implementation {
       }
     }
 		
-    call SpiByte.write( 0x40 | addr );
-    call SpiByte.write( data >> 8 );
+    call SpiByte.write( addr );
+    //call SpiByte.write( 0x40 | addr );
+		if( (data >> 8) != 0x00)
+    	call SpiByte.write( data >> 8 );
     return call SpiByte.write( data & 0xff );
   }
 

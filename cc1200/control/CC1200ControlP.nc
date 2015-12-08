@@ -29,7 +29,6 @@ module CC1200ControlP @safe() {
   uses interface CC1200Register as RXCTRL1;
   uses interface CC1200Register as RSSI;
   uses interface CC1200Register as TXCTRL;
-  uses interface CC1200Register as IOCFG2;
   uses interface CC1200Strobe as SRXON;
   uses interface CC1200Strobe as SRFOFF;
   uses interface CC1200Strobe as SXOSCOFF;
@@ -37,7 +36,51 @@ module CC1200ControlP @safe() {
 
 	// TJ ADD
   uses interface CC1200Strobe as SRES;
-  
+  uses interface CC1200Strobe as SFSTXON;
+
+  uses interface CC1200Register as IOCFG3;
+  uses interface CC1200Register as IOCFG2;
+  uses interface CC1200Register as DEVIATION_M;
+  uses interface CC1200Register as MODCFG_DEV_E;
+  uses interface CC1200Register as DCFILT_CFG;
+  uses interface CC1200Register as PREAMBLE_CFG0;
+  uses interface CC1200Register as IQIC;
+  uses interface CC1200Register as CHAN_BW;
+  uses interface CC1200Register as MDMCFG1;
+  uses interface CC1200Register as MDMCFG0;
+  uses interface CC1200Register as SYMBOL_RATE2;
+  uses interface CC1200Register as SYMBOL_RATE1;
+  uses interface CC1200Register as SYMBOL_RATE0;
+  uses interface CC1200Register as AGC_REF;
+  uses interface CC1200Register as AGC_CS_THR;
+  uses interface CC1200Register as AGC_CFG1;
+  uses interface CC1200Register as AGC_CFG0;
+  uses interface CC1200Register as FIFO_CFG;
+  uses interface CC1200Register as FS_CFG;
+  uses interface CC1200Register as PKT_CFG0;
+  uses interface CC1200Register as PA_CFG1;
+  uses interface CC1200Register as PKT_LEN;
+  uses interface CC1200Register as IF_MIX_CFG;
+  uses interface CC1200Register as FREQOFF_CFG;
+  uses interface CC1200Register as MDMCFG2;
+  uses interface CC1200Register as FREQ2;
+  uses interface CC1200Register as FREQ1;
+  uses interface CC1200Register as FREQ0;
+  uses interface CC1200Register as FS_DIG1;
+  uses interface CC1200Register as FS_DIG0;
+  uses interface CC1200Register as FS_CAL1;
+  uses interface CC1200Register as FS_CAL0;
+  uses interface CC1200Register as FS_DIVTWO;
+  uses interface CC1200Register as FS_DSM0;
+  uses interface CC1200Register as FS_DVC0;
+  uses interface CC1200Register as FS_PFD;
+  uses interface CC1200Register as FS_PRE;
+  uses interface CC1200Register as FS_REG_DIV_CML;
+  uses interface CC1200Register as FS_SPARE;
+  uses interface CC1200Register as FS_VCO0;
+  uses interface CC1200Register as XOSC5;
+  uses interface CC1200Register as XOSC1;
+
   uses interface Resource as SpiResource;
   uses interface Resource as RssiResource;
   uses interface Resource as SyncResource;
@@ -95,7 +138,7 @@ implementation {
   /***************** Init Commands ****************/
   command error_t Init.init() {
     int i, t;
-    //call CSN.makeOutput();
+    call CSN.makeOutput();
     //call RSTN.makeOutput();
     call VREN.makeOutput();
     
@@ -188,10 +231,18 @@ implementation {
     return SUCCESS;
   }
 
+	uint16_t readReg = 0;
   async command error_t CC1200Power.startOscillator() {
     atomic {
-			call Leds.led1Toggle();
-			call SRES.strobe();
+    call CSN.clr();
+		call IOCFG3.write(0x06);
+    call CSN.set();
+
+    call CSN.clr();
+		call IOCFG3.read(&readReg);
+		if(readReg == 0x0006)
+			call Leds.led1Off();
+    call CSN.set();
 /*
       if ( m_state != S_VREG_STARTED ) {
         return FAIL;

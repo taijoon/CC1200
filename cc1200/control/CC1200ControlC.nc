@@ -49,10 +49,52 @@ implementation {
   CC1200ControlP.RXCTRL1 -> Spi.RXCTRL1;
   CC1200ControlP.RSSI  -> Spi.RSSI;
   CC1200ControlP.TXCTRL  -> Spi.TXCTRL;
-
-// TJ ADD
+	// TJ ADD
   CC1200ControlP.SRES -> Spi.SRES;
+  CC1200ControlP.SFSTXON -> Spi.SFSTXON;
 
+  CC1200ControlP.IOCFG3  -> Spi.IOCFG3;
+  CC1200ControlP.IOCFG2  -> Spi.IOCFG2;
+  CC1200ControlP.DEVIATION_M  -> Spi.DEVIATION_M;
+  CC1200ControlP.MODCFG_DEV_E  -> Spi.MODCFG_DEV_E;
+  CC1200ControlP.DCFILT_CFG  -> Spi.DCFILT_CFG;
+  CC1200ControlP.PREAMBLE_CFG0  -> Spi.PREAMBLE_CFG0;
+  CC1200ControlP.IQIC  -> Spi.IQIC;
+  CC1200ControlP.CHAN_BW  -> Spi.CHAN_BW;
+  CC1200ControlP.MDMCFG1  -> Spi.MDMCFG1;
+  CC1200ControlP.MDMCFG0  -> Spi.MDMCFG0;
+  CC1200ControlP.SYMBOL_RATE2  -> Spi.SYMBOL_RATE2;
+  CC1200ControlP.SYMBOL_RATE1  -> Spi.SYMBOL_RATE1;
+  CC1200ControlP.SYMBOL_RATE0  -> Spi.SYMBOL_RATE0;
+  CC1200ControlP.AGC_REF  -> Spi.AGC_REF;
+  CC1200ControlP.AGC_CS_THR  -> Spi.AGC_CS_THR;
+  CC1200ControlP.AGC_CFG1  -> Spi.AGC_CFG1;
+  CC1200ControlP.AGC_CFG0  -> Spi.AGC_CFG0;
+  CC1200ControlP.FIFO_CFG  -> Spi.FIFO_CFG;
+  CC1200ControlP.FS_CFG  -> Spi.FS_CFG;
+  CC1200ControlP.PKT_CFG0  -> Spi.PKT_CFG0;
+  CC1200ControlP.PA_CFG1  -> Spi.PA_CFG1;
+  CC1200ControlP.PKT_LEN  -> Spi.PKT_LEN;
+  CC1200ControlP.IF_MIX_CFG  -> Spi.IF_MIX_CFG;
+  CC1200ControlP.FREQOFF_CFG  -> Spi.FREQOFF_CFG;
+  CC1200ControlP.MDMCFG2  -> Spi.MDMCFG2;
+  CC1200ControlP.FREQ2  -> Spi.FREQ2;
+  CC1200ControlP.FREQ1  -> Spi.FREQ1;
+  CC1200ControlP.FREQ0  -> Spi.FREQ0;
+  CC1200ControlP.FS_DIG1  -> Spi.FS_DIG1;
+  CC1200ControlP.FS_DIG0  -> Spi.FS_DIG0;
+  CC1200ControlP.FS_CAL1  -> Spi.FS_CAL1;
+  CC1200ControlP.FS_CAL0  -> Spi.FS_CAL0;
+  CC1200ControlP.FS_DIVTWO  -> Spi.FS_DIVTWO;
+  CC1200ControlP.FS_DSM0  -> Spi.FS_DSM0;
+  CC1200ControlP.FS_DVC0  -> Spi.FS_DVC0;
+  CC1200ControlP.FS_PFD  -> Spi.FS_PFD;
+  CC1200ControlP.FS_PRE  -> Spi.FS_PRE;
+  CC1200ControlP.FS_REG_DIV_CML  -> Spi.FS_REG_DIV_CML;
+  CC1200ControlP.FS_SPARE  -> Spi.FS_SPARE;
+  CC1200ControlP.FS_VCO0  -> Spi.FS_VCO0;
+  CC1200ControlP.XOSC5  -> Spi.XOSC5;
+  CC1200ControlP.XOSC1  -> Spi.XOSC1;
 
   components new CC1200SpiC() as SyncSpiC;
   CC1200ControlP.SyncResource -> SyncSpiC;

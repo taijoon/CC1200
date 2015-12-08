@@ -21,9 +21,6 @@ generic configuration CC1200SpiC() {
   provides interface CC1200Strobe as STXENC;
   provides interface CC1200Strobe as SAES;
 
-	// TJ ADD
-  provides interface CC1200Strobe as SRES;
-
   // registers
   provides interface CC1200Register as MAIN;
   provides interface CC1200Register as MDMCTRL0;
@@ -46,6 +43,52 @@ generic configuration CC1200SpiC() {
   provides interface CC1200Register as MANOR;
   provides interface CC1200Register as AGCCTRL;
   provides interface CC1200Register as RXFIFO_REGISTER;
+	// TJ ADD
+  provides interface CC1200Strobe as SRES;
+  provides interface CC1200Strobe as SFSTXON;
+
+  provides interface CC1200Register as IOCFG3;
+  provides interface CC1200Register as IOCFG2;
+  provides interface CC1200Register as DEVIATION_M;
+  provides interface CC1200Register as MODCFG_DEV_E;
+  provides interface CC1200Register as DCFILT_CFG;
+  provides interface CC1200Register as PREAMBLE_CFG0;
+  provides interface CC1200Register as IQIC;
+  provides interface CC1200Register as CHAN_BW;
+  provides interface CC1200Register as MDMCFG1;
+  provides interface CC1200Register as MDMCFG0;
+  provides interface CC1200Register as SYMBOL_RATE2;
+  provides interface CC1200Register as SYMBOL_RATE1;
+  provides interface CC1200Register as SYMBOL_RATE0;
+  provides interface CC1200Register as AGC_REF;
+  provides interface CC1200Register as AGC_CS_THR;
+  provides interface CC1200Register as AGC_CFG1;
+  provides interface CC1200Register as AGC_CFG0;
+  provides interface CC1200Register as FIFO_CFG;
+  provides interface CC1200Register as FS_CFG;
+  provides interface CC1200Register as PKT_CFG0;
+  provides interface CC1200Register as PA_CFG1;
+  provides interface CC1200Register as PKT_LEN;
+  provides interface CC1200Register as IF_MIX_CFG;
+  provides interface CC1200Register as FREQOFF_CFG;
+  provides interface CC1200Register as MDMCFG2;
+  provides interface CC1200Register as FREQ2;
+  provides interface CC1200Register as FREQ1;
+  provides interface CC1200Register as FREQ0;
+  provides interface CC1200Register as FS_DIG1;
+  provides interface CC1200Register as FS_DIG0;
+  provides interface CC1200Register as FS_CAL1;
+  provides interface CC1200Register as FS_CAL0;
+  provides interface CC1200Register as FS_DIVTWO;
+  provides interface CC1200Register as FS_DSM0;
+  provides interface CC1200Register as FS_DVC0;
+  provides interface CC1200Register as FS_PFD;
+  provides interface CC1200Register as FS_PRE;
+  provides interface CC1200Register as FS_REG_DIV_CML;
+  provides interface CC1200Register as FS_SPARE;
+  provides interface CC1200Register as FS_VCO0;
+  provides interface CC1200Register as XOSC5;
+  provides interface CC1200Register as XOSC1;
 
   // ram
   provides interface CC1200Ram as IEEEADR;
@@ -94,9 +137,6 @@ implementation {
   STXENC = Spi.Strobe[ CC1200_STXENC ];
   SAES = Spi.Strobe[ CC1200_SAES ];
 
-	// TJ ADD
-  SRES = Spi.Strobe[ CC120X_SRES ];
-  
   // registers
   MAIN = Spi.Reg[ CC1200_MAIN ];
   MDMCTRL0 = Spi.Reg[ CC1200_MDMCTRL0 ];
@@ -119,6 +159,53 @@ implementation {
   MANOR = Spi.Reg[ CC1200_MANOR ];
   AGCCTRL = Spi.Reg[ CC1200_AGCCTRL ];
   RXFIFO_REGISTER = Spi.Reg[ CC1200_RXFIFO ];
+	// TJ ADD
+  SRES = Spi.Strobe[ CC120X_SRES ];
+  SFSTXON = Spi.Strobe[ CC120X_SFSTXON ];
+  //IOCFG2 = Spi.Reg[ CC1200_IOCFG2 ];
+  IOCFG3 = Spi.Reg[ CC120X_IOCFG3 ];
+  IOCFG2 = Spi.Reg[ CC120X_IOCFG2 ];
+  DEVIATION_M = Spi.Reg[ CC120X_DEVIATION_M ];
+  MODCFG_DEV_E = Spi.Reg[ CC1200_RXFIFO ];
+  DCFILT_CFG = Spi.Reg[ CC1200_RXFIFO ];
+  PREAMBLE_CFG0 = Spi.Reg[ CC1200_RXFIFO ];
+  IQIC = Spi.Reg[ CC1200_RXFIFO ];
+  CHAN_BW = Spi.Reg[ CC1200_RXFIFO ];
+  MDMCFG1 = Spi.Reg[ CC1200_RXFIFO ];
+  MDMCFG0 = Spi.Reg[ CC1200_RXFIFO ];
+  SYMBOL_RATE2 = Spi.Reg[ CC1200_RXFIFO ];
+  SYMBOL_RATE1 = Spi.Reg[ CC1200_RXFIFO ];
+  SYMBOL_RATE0 = Spi.Reg[ CC1200_RXFIFO ];
+  AGC_REF = Spi.Reg[ CC1200_RXFIFO ];
+  AGC_CS_THR = Spi.Reg[ CC1200_RXFIFO ];
+  AGC_CFG1 = Spi.Reg[ CC1200_RXFIFO ];
+  AGC_CFG0 = Spi.Reg[ CC1200_RXFIFO ];
+  FIFO_CFG = Spi.Reg[ CC1200_RXFIFO ];
+  FS_CFG = Spi.Reg[ CC1200_RXFIFO ];
+  PKT_CFG0 = Spi.Reg[ CC1200_RXFIFO ];
+  PA_CFG1 = Spi.Reg[ CC1200_RXFIFO ];
+  PKT_LEN = Spi.Reg[ CC1200_RXFIFO ];
+  IF_MIX_CFG = Spi.Reg[ CC1200_RXFIFO ];
+  FREQOFF_CFG = Spi.Reg[ CC1200_RXFIFO ];
+  MDMCFG2 = Spi.Reg[ CC1200_RXFIFO ];
+  FREQ2 = Spi.Reg[ CC1200_RXFIFO ];
+  FREQ1 = Spi.Reg[ CC1200_RXFIFO ];
+  FREQ0 = Spi.Reg[ CC1200_RXFIFO ];
+  FS_DIG1 = Spi.Reg[ CC1200_RXFIFO ];
+  FS_DIG0 = Spi.Reg[ CC1200_RXFIFO ];
+  FS_CAL1 = Spi.Reg[ CC1200_RXFIFO ];
+  FS_CAL0 = Spi.Reg[ CC1200_RXFIFO ];
+  FS_DIVTWO = Spi.Reg[ CC1200_RXFIFO ];
+  FS_DSM0 = Spi.Reg[ CC1200_RXFIFO ];
+  FS_DVC0 = Spi.Reg[ CC1200_RXFIFO ];
+  FS_PFD = Spi.Reg[ CC1200_RXFIFO ];
+  FS_PRE = Spi.Reg[ CC1200_RXFIFO ];
+  FS_REG_DIV_CML = Spi.Reg[ CC1200_RXFIFO ];
+  FS_SPARE = Spi.Reg[ CC1200_RXFIFO ];
+  FS_VCO0 = Spi.Reg[ CC1200_RXFIFO ];
+  XOSC5 = Spi.Reg[ CC1200_RXFIFO ];
+  XOSC1 = Spi.Reg[ CC1200_RXFIFO ];
+
 
   // ram
   IEEEADR = Spi.Ram[ CC1200_RAM_IEEEADR ];

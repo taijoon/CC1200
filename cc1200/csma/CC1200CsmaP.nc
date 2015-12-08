@@ -44,8 +44,6 @@ implementation {
 
   /***************** SplitControl Commands ****************/
   command error_t SplitControl.start() {
-			call Leds.led2Toggle();
-    call CC1200Power.startOscillator();
     if(call SplitControlState.requestState(S_STARTING) == SUCCESS) {
       call CC1200Power.startVReg();
       return SUCCESS;
