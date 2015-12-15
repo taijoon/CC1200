@@ -139,8 +139,8 @@ implementation {
   command error_t Init.init() {
     int i, t;
     call CSN.makeOutput();
-    //call RSTN.makeOutput();
-    call VREN.makeOutput();
+    call RSTN.makeOutput();
+    //call VREN.makeOutput();
     
     m_short_addr = call ActiveMessageAddress.amAddress();
     m_ext_addr = call LocalIeeeEui64.getId();
@@ -232,43 +232,206 @@ implementation {
   }
 
 	uint16_t readReg = 0;
+	uint16_t i = 0;
   async command error_t CC1200Power.startOscillator() {
     atomic {
-    call CSN.clr();
-		call IOCFG3.write(0x06);
-    call CSN.set();
+	/* Register Write */
+    call CSN.clr();		call IOCFG3.write(0x0006);		call CSN.set();
+    call CSN.clr();		call DEVIATION_M.write(0x00D1);    call CSN.set();
+    call CSN.clr();		call MODCFG_DEV_E.write(0x0000);    call CSN.set();
+    call CSN.clr();		call DCFILT_CFG.write(0x5D);    call CSN.set();
+    call CSN.clr();		call PREAMBLE_CFG0.write(0x008A);    call CSN.set();
+    call CSN.clr();		call IQIC.write(0xCB);    call CSN.set();
+    call CSN.clr();		call CHAN_BW.write(0xA6);    call CSN.set();
+    call CSN.clr();		call MDMCFG1.write(0x40);    call CSN.set();
+    call CSN.clr();		call MDMCFG0.write(0x05);    call CSN.set();
+    call CSN.clr();		call SYMBOL_RATE2.write(0x3F);    call CSN.set();
+    call CSN.clr();		call SYMBOL_RATE1.write(0x75);    call CSN.set();
+    call CSN.clr();		call SYMBOL_RATE0.write(0x10);    call CSN.set();
+    call CSN.clr();		call AGC_REF.write(0x20);    call CSN.set();
+    call CSN.clr();		call AGC_CS_THR.write(0xEC);    call CSN.set();
+    call CSN.clr();		call AGC_CFG1.write(0x51);    call CSN.set();
+    call CSN.clr();		call AGC_CFG0.write(0xC7);    call CSN.set();
+    call CSN.clr();		call FIFO_CFG.write(0x00);    call CSN.set();
+    call CSN.clr();		call FS_CFG.write(0x12);    call CSN.set();
+    call CSN.clr();		call PKT_CFG0.write(0x20);    call CSN.set();
+    call CSN.clr();		call PA_CFG1.write(0x3F);    call CSN.set();
+    call CSN.clr();		call PKT_LEN.write(0xFF);    call CSN.set();
 
-    call CSN.clr();
-		call IOCFG3.read(&readReg);
-		if(readReg == 0x0006)
-			call Leds.led1Off();
-    call CSN.set();
+	/* Register Read */
+    call CSN.clr();		call IOCFG3.read(&readReg);    call CSN.set();
+		if(readReg != 0x0006)		call Leds.led1Off();
+		else		readReg = 0;
+    call CSN.clr();		call DEVIATION_M.read(&readReg);    call CSN.set();
+		if(readReg != 0x00D1)			call Leds.led1Off();
+		else		readReg = 0;
+    call CSN.clr();		call MODCFG_DEV_E.read(&readReg);    call CSN.set();
+		if(readReg != 0x0000)			call Leds.led1Off();
+		else			readReg = 0;
+    call CSN.clr();		call DCFILT_CFG.read(&readReg); call CSN.set();
+		if(readReg != 0x005D)			call Leds.led1Off();
+		else			readReg = 0;
+    call CSN.clr();		call PREAMBLE_CFG0.read(&readReg);	call CSN.set();
+		if(readReg != 0x008A)			call Leds.led1Off();
+		else			readReg = 0;
+    call CSN.clr();		call IQIC.read(&readReg);	call CSN.set();
+		if(readReg != 0x00CB)			call Leds.led1Off();
+		else			readReg = 0;
+    call CSN.clr();		call CHAN_BW.read(&readReg);	call CSN.set();
+		if(readReg != 0x00A6)			call Leds.led1Off();
+		else			readReg = 0;
+    call CSN.clr();		call MDMCFG1.read(&readReg);	call CSN.set();
+		if(readReg != 0x0040)			call Leds.led1Off();
+		else			readReg = 0;
+    call CSN.clr();		call MDMCFG0.read(&readReg);	call CSN.set();
+		if(readReg != 0x0005)			call Leds.led1Off();
+		else			readReg = 0;
+    call CSN.clr();		call SYMBOL_RATE2.read(&readReg);	call CSN.set();
+		if(readReg != 0x003F)			call Leds.led1Off();
+		else			readReg = 0;
+    call CSN.clr();		call SYMBOL_RATE1.read(&readReg);	call CSN.set();
+		if(readReg != 0x0075)			call Leds.led1Off();
+		else			readReg = 0;
+    call CSN.clr();		call SYMBOL_RATE0.read(&readReg);	call CSN.set();
+		if(readReg != 0x0010)			call Leds.led1Off();
+		else			readReg = 0;
+    call CSN.clr();		call AGC_REF.read(&readReg);	call CSN.set();
+		if(readReg != 0x0020)			call Leds.led1Off();
+		else			readReg = 0;
+
+    call CSN.clr();		call AGC_CS_THR.read(&readReg);	call CSN.set();
+		if(readReg != 0x00EC)			call Leds.led1Off();
+		else			readReg = 0;
+
+    call CSN.clr();		call AGC_CFG1.read(&readReg);	call CSN.set();
+		if(readReg != 0x0051)			call Leds.led1Off();
+		else			readReg = 0;
+
+    call CSN.clr();		call AGC_CFG0.read(&readReg);	call CSN.set();
+		if(readReg != 0x00C7)			call Leds.led1Off();
+		else			readReg = 0;
+
+    call CSN.clr();		call FIFO_CFG.read(&readReg);	call CSN.set();
+		if(readReg != 0x0000)			call Leds.led1Off();
+		else			readReg = 0;
+
+    call CSN.clr();		call FS_CFG.read(&readReg);	call CSN.set();
+		if(readReg != 0x0012)			call Leds.led1Off();
+		else			readReg = 0;
+
+    call CSN.clr();		call PKT_CFG0.read(&readReg);	call CSN.set();
+		if(readReg != 0x0020)			call Leds.led1Off();
+		else			readReg = 0;
+
+    call CSN.clr();		call PA_CFG1.read(&readReg);	call CSN.set();
+		if(readReg != 0x003F)			call Leds.led1Off();
+		else			readReg = 0;
+
+    call CSN.clr();		call PKT_LEN.read(&readReg);	call CSN.set();
+		if(readReg != 0x00FF)			call Leds.led1Off();
+		else			readReg = 0;
+
 /*
-      if ( m_state != S_VREG_STARTED ) {
-        return FAIL;
-      }
-      m_state = S_XOSC_STARTING;
-      call IOCFG1.write( CC1200_SFDMUX_XOSC16M_STABLE << 
-                         CC1200_IOCFG1_CCAMUX );
-                         
-      call InterruptCCA.enableRisingEdge();
-      call SXOSCON.strobe();
-      
-      call IOCFG0.write( ( 1 << CC1200_IOCFG0_FIFOP_POLARITY ) |
-          ( 127 << CC1200_IOCFG0_FIFOP_THR ) );
-                         
-      writeFsctrl();
-      writeMdmctrl0();
-  
-      call RXCTRL1.write( ( 1 << CC1200_RXCTRL1_RXBPF_LOCUR ) |
-          ( 1 << CC1200_RXCTRL1_LOW_LOWGAIN ) |
-          ( 1 << CC1200_RXCTRL1_HIGH_HGM ) |
-          ( 1 << CC1200_RXCTRL1_LNA_CAP_ARRAY ) |
-          ( 1 << CC1200_RXCTRL1_RXMIX_TAIL ) |
-          ( 1 << CC1200_RXCTRL1_RXMIX_VCM ) |
-          ( 2 << CC1200_RXCTRL1_RXMIX_CURRENT ) );
-
-      writeTxctrl();
+    call CSN.clr();		call IF_MIX_CFG.write(0x1C);    call CSN.set();
+//    call CSN.clr();		call IF_MIX_CFG.read(&readReg);
+//		if(readReg != 0x001C)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FREQOFF_CFG.write(0x22);    call CSN.set();
+//    call CSN.clr();		call FREQOFF_CFG.read(&readReg);
+//		if(readReg != 0x0022)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call MDMCFG2.write(0x0C);    call CSN.set();
+//    call CSN.clr();		call MDMCFG2.read(&readReg);
+//		if(readReg != 0x000C)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FREQ2.write(0x56);    call CSN.set();
+//    call CSN.clr();		call FREQ2.read(&readReg);
+//		if(readReg != 0x0056)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FREQ1.write(0xCC);    call CSN.set();
+ //   call CSN.clr();		call FREQ1.read(&readReg);
+//		if(readReg != 0x00CC)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FREQ0.write(0xCC);    call CSN.set();
+//    call CSN.clr();		call FREQ0.read(&readReg);
+//		if(readReg != 0x00CC)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_DIG1.write(0x07);    call CSN.set();
+//    call CSN.clr();		call FS_DIG1.read(&readReg);
+//		if(readReg != 0x0007)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_DIG0.write(0xAF);    call CSN.set();
+//    call CSN.clr();		call FS_DIG0.read(&readReg);
+//		if(readReg != 0x00AF)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_CAL1.write(0x40);    call CSN.set();
+//    call CSN.clr();		call FS_CAL1.read(&readReg);
+//		if(readReg != 0x0040)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_CAL0.write(0x0E);    call CSN.set();
+//    call CSN.clr();		call FS_CAL0.read(&readReg);
+//		if(readReg != 0x000E)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_DIVTWO.write(0x03);    call CSN.set();
+//    call CSN.clr();		call FS_DIVTWO.read(&readReg);
+//		if(readReg != 0x0003)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_DSM0.write(0x33);    call CSN.set();
+//    call CSN.clr();		call FS_DSM0.read(&readReg);
+//		if(readReg != 0x0033)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_DVC0.write(0x17);    call CSN.set();
+//    call CSN.clr();		call FS_DVC0.read(&readReg);
+//		if(readReg != 0x0017)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_PFD.write(0x00);    call CSN.set();
+//    call CSN.clr();		call FS_PFD.read(&readReg);
+//		if(readReg != 0x0000)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_PRE.write(0x6E);    call CSN.set();
+//    call CSN.clr();		call FS_PRE.read(&readReg);
+//		if(readReg != 0x006E)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_REG_DIV_CML.write(0x14);    call CSN.set();
+//    call CSN.clr();		call FS_REG_DIV_CML.read(&readReg);
+//		if(readReg != 0x003F)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_SPARE.write(0xAC);    call CSN.set();
+//    call CSN.clr();		call FS_SPARE.read(&readReg);
+//		if(readReg != 0x00AC)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call FS_VCO0.write(0xB5);    call CSN.set();
+//    call CSN.clr();		call FS_VCO0.read(&readReg);
+//		if(readReg != 0x00B5)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call XOSC5.write(0x0E);    call CSN.set();
+//    call CSN.clr();		call XOSC5.read(&readReg);
+//		if(readReg != 0x000E)
+//			call Leds.led1Off();
+//    call CSN.set();
+    call CSN.clr();		call XOSC1.write(0x03);    call CSN.set();
+//    call CSN.clr();		call XOSC1.read(&readReg);
+//		if(readReg != 0x0003)
+//			call Leds.led1Off();
+//    call CSN.set();
 */
     }
 		return SUCCESS;

@@ -6,7 +6,7 @@ module CC1200SpiP @safe() {
     interface Resource[ uint8_t id ];
     interface CC1200Fifo as Fifo[ uint8_t id ];
     interface CC1200Ram as Ram[ uint16_t id ];
-    interface CC1200Register as Reg[ uint8_t id ];
+    interface CC1200Register as Reg[ uint16_t id ];
     interface CC1200Strobe as Strobe[ uint8_t id ];
   }
   
@@ -149,8 +149,8 @@ implementation {
   /***************** Fifo Commands ****************/
   async command cc1200_status_t Fifo.beginRead[ uint8_t addr ]( uint8_t* data, 
                                                                 uint8_t len ) {
-    
     cc1200_status_t status = 0;
+   /* 
 
     atomic {
       if(call WorkingState.isIdle()) {
@@ -162,7 +162,7 @@ implementation {
         
     status = call SpiByte.write( m_addr );
     call Fifo.continueRead[ addr ]( data, len );
-    
+    */
     return status;
     
   }
@@ -176,7 +176,7 @@ implementation {
                                                             uint8_t len ) {
 
     uint8_t status = 0;
- 
+/* 
     atomic {
       if(call WorkingState.isIdle()) {
         return status;
@@ -187,7 +187,7 @@ implementation {
 
     status = call SpiByte.write( m_addr );
     call SpiPacket.send( data, NULL, len );
-
+*/
     return status;
 
   }
@@ -198,7 +198,7 @@ implementation {
                                                            uint8_t len ) {
 
     cc1200_status_t status = 0;
-
+/*
     atomic {
       if(call WorkingState.isIdle()) {
         return status;
@@ -212,17 +212,16 @@ implementation {
     for ( ; len; len-- ) {
       *data++ = call SpiByte.write( 0 );
     }
-
+*/
     return status;
-
   }
 
 
   async command cc1200_status_t Ram.write[ uint16_t addr ]( uint8_t offset,
                                                             uint8_t* data, 
                                                             uint8_t len ) {
-
     cc1200_status_t status = 0;
+/*
     uint8_t tmpLen = len;
     uint8_t * COUNT(tmpLen) tmpData = (uint8_t * COUNT(tmpLen))data;
 
@@ -239,13 +238,12 @@ implementation {
     for ( ; len; len-- ) {
       call SpiByte.write( tmpData[tmpLen-len] );
     }
-
+*/
     return status;
-
   }
 
   /***************** Register Commands ****************/
-  async command cc1200_status_t Reg.read[ uint8_t addr ]( uint16_t* data ) {
+  async command cc1200_status_t Reg.read[ uint16_t addr ]( uint16_t* data ) {
 
     cc1200_status_t status = 0;
     
@@ -264,15 +262,15 @@ implementation {
 
   }
 
-  async command cc1200_status_t Reg.write[ uint8_t addr ]( uint16_t data ) {
+  async command cc1200_status_t Reg.write[ uint16_t addr ]( uint16_t data ) {
     atomic {
       if(call WorkingState.isIdle()) {
         return 0;
       }
     }
 		
-    call SpiByte.write( addr );
-    //call SpiByte.write( 0x40 | addr );
+    //call SpiByte.write( addr );
+    call SpiByte.write( 0x40 | addr );
 		if( (data >> 8) != 0x00)
     	call SpiByte.write( data >> 8 );
     return call SpiByte.write( data & 0xff );
