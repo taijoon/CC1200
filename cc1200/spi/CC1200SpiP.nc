@@ -244,8 +244,8 @@ implementation {
 
   /***************** Register Commands ****************/
   async command cc1200_status_t Reg.read[ uint16_t addr ]( uint16_t* data ) {
-
     cc1200_status_t status = 0;
+		uint8_t low=0;
     
     atomic {
       if(call WorkingState.isIdle()) {
@@ -253,10 +253,13 @@ implementation {
       }
     }
     
-    status = call SpiByte.write( addr | 0x80 );
-    //status = call SpiByte.write( addr | 0x80 | 0x40 );
-    //*data = (uint16_t)call SpiByte.write( 0x3D ) << 8;
-    *data |= call SpiByte.write( 0x3D );
+		if( (addr >> 8) != 0x2F)
+			status = call SpiByte.write( addr | 0x80 | 0x40);
+		else{
+    	call SpiByte.write( 0x80 | 0x40 | 0x2F );
+    	call SpiByte.write( addr );
+		}
+			*data = call SpiByte.write( 0x3D );
     
     return status;
 
@@ -270,7 +273,14 @@ implementation {
     }
 		
     //call SpiByte.write( addr );
-    call SpiByte.write( 0x40 | addr );
+		if( (addr >> 8) != 0x2F)
+    	call SpiByte.write( 0x40 | addr );
+		else{
+    	call SpiByte.write( 0x40 | 0x2F );
+    	call SpiByte.write( addr );
+			//call Leds.led2Off();
+		}
+
 		if( (data >> 8) != 0x00)
     	call SpiByte.write( data >> 8 );
     return call SpiByte.write( data & 0xff );
