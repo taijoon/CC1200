@@ -245,7 +245,6 @@ implementation {
   /***************** Register Commands ****************/
   async command cc1200_status_t Reg.read[ uint16_t addr ]( uint16_t* data ) {
     cc1200_status_t status = 0;
-		uint8_t low=0;
     
     atomic {
       if(call WorkingState.isIdle()) {
@@ -259,7 +258,7 @@ implementation {
     	call SpiByte.write( 0x80 | 0x40 | 0x2F );
     	call SpiByte.write( addr );
 		}
-			*data = call SpiByte.write( 0x3D );
+		*data = call SpiByte.write( 0x3D );
     
     return status;
 

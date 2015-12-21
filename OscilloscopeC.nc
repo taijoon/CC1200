@@ -65,7 +65,7 @@ implementation
     local.interval = DEFAULT_INTERVAL;
     local.id = TOS_NODE_ID;
     startTimer();
-    //if (call RadioControl.start() != SUCCESS)
+    if (call RadioControl.start() != SUCCESS)
 			;
   }
 
@@ -76,7 +76,7 @@ implementation
   }
 
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len) {
-    oscilloscope_t *omsg = payload;
+    //oscilloscope_t *omsg = payload;
     report_received();
     return msg;
   }
@@ -92,7 +92,9 @@ implementation
 			status = 1;
 		}
 		else if(x == 0 && status == 1){
-			call RadioControl.start();
+	    memcpy(call AMSend.getPayload(&sendBuf, sizeof(local)), &local, sizeof local);
+	    if (call AMSend.send(AM_BROADCAST_ADDR, &sendBuf, sizeof local) == SUCCESS)
+	      sendBusy = TRUE;
 			status = 0;
 		}
 	}

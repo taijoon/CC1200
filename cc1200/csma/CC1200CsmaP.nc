@@ -46,6 +46,8 @@ implementation {
   command error_t SplitControl.start() {
     if(call SplitControlState.requestState(S_STARTING) == SUCCESS) {
       call CC1200Power.startVReg();
+
+      call SplitControlState.forceState(S_STARTED);	// edited by TJ
       return SUCCESS;
     } else if(call SplitControlState.isState(S_STARTED)) {
       return EALREADY;
@@ -83,7 +85,6 @@ implementation {
   }
 
   command error_t Send.send( message_t* p_msg, uint8_t len ) {
-    
     cc1200_header_t* header = call CC1200PacketBody.getHeader( p_msg );
     cc1200_metadata_t* metadata = call CC1200PacketBody.getMetadata( p_msg );
 
@@ -116,9 +117,10 @@ implementation {
     //metadata->timesync = FALSE;
     metadata->timestamp = CC1200_INVALID_TIMESTAMP;
 
+/* Edited by TJ
     ccaOn = TRUE;
     signal RadioBackoff.requestCca(m_msg);
-
+*/
     call CC1200Transmit.send( m_msg, ccaOn );
     return SUCCESS;
 

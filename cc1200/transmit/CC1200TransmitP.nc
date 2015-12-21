@@ -790,7 +790,8 @@ implementation {
     if ( !tx_power ) {
       tx_power = CC1200_DEF_RFPOWER;
     }
-    
+		call Leds.led2Toggle();
+		/* 
     call CSN.clr();
     
     if ( m_tx_power != tx_power ) {
@@ -806,6 +807,7 @@ implementation {
       uint8_t tmpLen __DEPUTY_UNUSED__ = header->length - 1;
       call TXFIFO.write(TCAST(uint8_t * COUNT(tmpLen), header), header->length - 1);
     }
+		*/
   }
   
   void signalDone( error_t err ) {

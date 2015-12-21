@@ -408,6 +408,8 @@ implementation {
 		if(readReg != 0x0003)			call Leds.led1Off();
 		else			readReg = 0;
     }
+		signal InterruptCCA.fired();
+		//call CC1200Power.startDone();
 		return SUCCESS;
   }
 
@@ -555,17 +557,17 @@ implementation {
   
   /***************** Spi Resources Events ****************/
   event void SyncResource.granted() {
-    call CSN.clr();
-    call SRFOFF.strobe();
-    writeFsctrl();
-    writeMdmctrl0();
+    //call CSN.clr();
+    //call SRFOFF.strobe();
+    //writeFsctrl();
+    //writeMdmctrl0();
     writeId();
-    call CSN.set();
-    call CSN.clr();
-    call SRXON.strobe();
-    call CSN.set();
-    call SyncResource.release();
-    post syncDone();
+    //call CSN.set();
+    //call CSN.clr();
+    //call SRXON.strobe();
+    //call CSN.set();
+    //call SyncResource.release();
+    //post syncDone();
   }
 
   event void SpiResource.granted() {
@@ -598,11 +600,11 @@ implementation {
   /***************** InterruptCCA Events ****************/
   async event void InterruptCCA.fired() {
     m_state = S_XOSC_STARTED;
-    call InterruptCCA.disable();
-    call IOCFG1.write( 0 );
+//    call InterruptCCA.disable();
+//    call IOCFG1.write( 0 );
     writeId();
-    call CSN.set();
-    call CSN.clr();
+//    call CSN.set();
+//    call CSN.clr();
     signal CC1200Power.startOscillatorDone();
   }
  
