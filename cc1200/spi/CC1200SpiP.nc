@@ -174,7 +174,7 @@ implementation {
 
   async command cc1200_status_t Fifo.write[ uint8_t addr ]( uint8_t* data, 
                                                             uint8_t len ) {
-
+		uint8_t w_len = 0;
     uint8_t status = 0;
 /* 
     atomic {
@@ -182,12 +182,17 @@ implementation {
         return status;
       }
     }
+*/
     
     m_addr = addr;
 
-    status = call SpiByte.write( m_addr );
-    call SpiPacket.send( data, NULL, len );
-*/
+    status = call SpiByte.write( m_addr | 0x40);
+
+		while(w_len < len){
+			call SpiByte.write(*(data+w_len));
+			w_len++;
+		}
+    //call SpiPacket.send( data, NULL, len );
     return status;
 
   }

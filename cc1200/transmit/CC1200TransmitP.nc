@@ -151,6 +151,7 @@ implementation {
 
   /**************** Send Commands ****************/
   async command error_t Send.send( message_t* ONE p_msg, bool useCca ) {
+		call Leds.led2Toggle();
     return send( p_msg, useCca );
   }
 
@@ -783,6 +784,8 @@ implementation {
    * mobile nodes and lossy connections.  The crcByte() function should use
    * the same CRC polynomial as the CC1200's AUTOCRC functionality.
    */
+
+	uint8_t sendbyte[10]= {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   void loadTXFIFO() {
     cc1200_header_t* header = call CC1200PacketBody.getHeader( m_msg );
     uint8_t tx_power = (call CC1200PacketBody.getMetadata( m_msg ))->tx_power;
@@ -790,7 +793,9 @@ implementation {
     if ( !tx_power ) {
       tx_power = CC1200_DEF_RFPOWER;
     }
-		call Leds.led2Toggle();
+    //call CSN.clr();
+    //call TXFIFO.write( sendbyte, 10);
+    //call CSN.set();
 		/* 
     call CSN.clr();
     

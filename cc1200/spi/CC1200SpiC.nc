@@ -21,6 +21,21 @@ generic configuration CC1200SpiC() {
   provides interface CC1200Strobe as STXENC;
   provides interface CC1200Strobe as SAES;
 
+	// TJ ADD
+  provides interface CC1200Strobe as SRES;
+  provides interface CC1200Strobe as SFSTXON;
+  provides interface CC1200Strobe as SXOFF;
+  provides interface CC1200Strobe as SCAL;
+  provides interface CC1200Strobe as SRX;
+  provides interface CC1200Strobe as STX;
+  provides interface CC1200Strobe as SIDLE;
+  provides interface CC1200Strobe as SAFC;
+  provides interface CC1200Strobe as SWOR;
+  provides interface CC1200Strobe as SPWD;
+  provides interface CC1200Strobe as SFRX;
+  provides interface CC1200Strobe as SFTX;
+  provides interface CC1200Strobe as SWORRST;
+
   // registers
   provides interface CC1200Register as MAIN;
   provides interface CC1200Register as MDMCTRL0;
@@ -44,9 +59,6 @@ generic configuration CC1200SpiC() {
   provides interface CC1200Register as AGCCTRL;
   provides interface CC1200Register as RXFIFO_REGISTER;
 	// TJ ADD
-  provides interface CC1200Strobe as SRES;
-  provides interface CC1200Strobe as SFSTXON;
-
   provides interface CC1200Register as IOCFG3;
   provides interface CC1200Register as IOCFG2;
   provides interface CC1200Register as DEVIATION_M;
@@ -121,7 +133,7 @@ implementation {
   Resource = Spi.Resource[ CLIENT_ID ];
   
   // commands
-  SNOP = Spi.Strobe[ CC1200_SNOP ];
+  //SNOP = Spi.Strobe[ CC1200_SNOP ];
   SXOSCON = Spi.Strobe[ CC1200_SXOSCON ];
   STXCAL = Spi.Strobe[ CC1200_STXCAL ];
   SRXON = Spi.Strobe[ CC1200_SRXON ];
@@ -136,6 +148,21 @@ implementation {
   SRXDEC = Spi.Strobe[ CC1200_SRXDEC ];
   STXENC = Spi.Strobe[ CC1200_STXENC ];
   SAES = Spi.Strobe[ CC1200_SAES ];
+	// TJ ADD
+  SRES = Spi.Strobe[ CC120X_SRES ];
+  SFSTXON = Spi.Strobe[ CC120X_SFSTXON ];
+  SXOFF = Spi.Strobe[ CC120X_SXOFF ];
+  SCAL = Spi.Strobe[ CC120X_SCAL ];
+  SRX = Spi.Strobe[ CC120X_SRX ];
+  STX = Spi.Strobe[ CC120X_STX ];
+  SIDLE = Spi.Strobe[ CC120X_SIDLE ];
+  SAFC = Spi.Strobe[ CC120X_SAFC ];
+  SWOR = Spi.Strobe[ CC120X_SWOR ];
+  SPWD = Spi.Strobe[ CC120X_SPWD ];
+  SFRX = Spi.Strobe[ CC120X_SFRX ];
+  SFTX = Spi.Strobe[ CC120X_SFTX ];
+  SWORRST = Spi.Strobe[ CC120X_SWORRST ];
+  SNOP = Spi.Strobe[ CC120X_SNOP ];
 
   // registers
   MAIN = Spi.Reg[ CC1200_MAIN ];
@@ -161,9 +188,6 @@ implementation {
   RXFIFO_REGISTER = Spi.Reg[ CC1200_RXFIFO ];
 
 	// TJ ADD
-  SRES = Spi.Strobe[ CC120X_SRES ];
-  SFSTXON = Spi.Strobe[ CC120X_SFSTXON ];
-  //IOCFG2 = Spi.Reg[ CC1200_IOCFG2 ];
   IOCFG3 = Spi.Reg[ CC120X_IOCFG3 ];
   IOCFG2 = Spi.Reg[ CC120X_IOCFG2 ];
   DEVIATION_M = Spi.Reg[ CC120X_DEVIATION_M ];

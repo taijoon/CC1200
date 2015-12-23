@@ -92,9 +92,8 @@ implementation
 			status = 1;
 		}
 		else if(x == 0 && status == 1){
-	    memcpy(call AMSend.getPayload(&sendBuf, sizeof(local)), &local, sizeof local);
-	    if (call AMSend.send(AM_BROADCAST_ADDR, &sendBuf, sizeof local) == SUCCESS)
-	      sendBusy = TRUE;
+	    //memcpy(call AMSend.getPayload(&sendBuf, sizeof(local)), &local, sizeof local);
+	    call AMSend.send(AM_BROADCAST_ADDR, &sendBuf, sizeof local);
 			status = 0;
 		}
 	}

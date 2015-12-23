@@ -30,6 +30,8 @@ implementation
   event void Timer0.fired()
   {
 		call Leds.led0Toggle();
+		call Leds.led1Toggle();
+		call Leds.led2Toggle();
 		call P31.toggle();
 		call P32.toggle();
 		call P33.toggle();
