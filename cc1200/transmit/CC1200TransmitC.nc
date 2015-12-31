@@ -53,6 +53,10 @@ implementation {
   CC1200TransmitP.TXNONCE -> Spi.TXNONCE;
   CC1200TransmitP.KEY0 -> Spi.KEY0;
   CC1200TransmitP.KEY1 -> Spi.KEY1;
+	// Edited by TJ
+	CC1200TransmitP.RFEND_CFG0 -> Spi.RFEND_CFG0;
+  CC1200TransmitP.STX       -> Spi.STX;
+  CC1200TransmitP.SFTX       -> Spi.SFTX;
   
   components CC1200ReceiveC;
   CC1200TransmitP.CC1200Receive -> CC1200ReceiveC;

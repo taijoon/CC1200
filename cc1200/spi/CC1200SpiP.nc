@@ -174,23 +174,20 @@ implementation {
 
   async command cc1200_status_t Fifo.write[ uint8_t addr ]( uint8_t* data, 
                                                             uint8_t len ) {
-		uint8_t w_len = 0;
+		uint8_t w_len = 0, fifo_d=0;
     uint8_t status = 0;
-/* 
     atomic {
       if(call WorkingState.isIdle()) {
         return status;
       }
     }
-*/
     
     m_addr = addr;
 
-    status = call SpiByte.write( m_addr | 0x40);
-
+    status = call SpiByte.write( m_addr);
 		while(w_len < len){
-			call SpiByte.write(*(data+w_len));
-			w_len++;
+			fifo_d = data[w_len++];
+			call SpiByte.write(fifo_d);
 		}
     //call SpiPacket.send( data, NULL, len );
     return status;

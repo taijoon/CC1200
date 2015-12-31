@@ -41,11 +41,27 @@ module CC1200TransmitP @safe() {
   uses interface CC1200Ram as KEY1;
   uses interface CC1200Ram as TXNONCE;
 
+	// Add by TJ
+  uses interface CC1200Strobe as STX;
+  uses interface CC1200Strobe as SFTX;
+  uses interface CC1200Register as RFEND_CFG0;
+
   uses interface CC1200Receive;
   uses interface Leds;
 }
 
 implementation {
+
+	typedef enum {
+		S_IDLE,
+		S_RX,
+		S_TX,
+		S_FSTXON,
+		S_CALIbRATE,
+		S_SETTING,
+		S_RX_FIFO_ERROR,
+		S_TX_FIFO_ERROR,
+	}cc1200_chip_status;
 
   typedef enum {
     S_STOPPED,
@@ -150,9 +166,45 @@ implementation {
 
 
   /**************** Send Commands ****************/
+	//	 									  0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a
+	//uint8_t txBuffer[29] = {0x01,0x01,0x01,0x01,0x7A,0x0E,0x14,
+	uint8_t txBuffer[21] = {0x14,
+													0x00,0x00,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,
+													0x0b,0x0c,0x0d,0x0e,0x0f,0x10,0x11,0x12,
+	//												0x0b,0x0c,0x0d,0x0e,0x0f,0x10,0x11,0x12,0x13,0x14,
+													0x00,0x00};
+	uint16_t txSeq = 0;
   async command error_t Send.send( message_t* ONE p_msg, bool useCca ) {
+		uint8_t chip_status = 0;
 		call Leds.led2Toggle();
-    return send( p_msg, useCca );
+
+		atomic{
+		txBuffer[1] = txSeq >> 8;
+		txBuffer[2] = txSeq & 0xff;
+		txSeq++;
+		}
+    call CSN.clr();
+    call TXFIFO.write( txBuffer, 21);
+    //call TXFIFO.write( p_msg, sizeof (message_t));
+    call CSN.set();
+
+    call CSN.clr();
+		chip_status = call STX.strobe();
+    call CSN.set();
+
+		chip_status = chip_status >> 4;
+		if(chip_status == S_TX_FIFO_ERROR){
+	    call CSN.clr();
+			call SFTX.strobe();
+    	call CSN.set();
+			call Leds.led1Off();
+		}
+		else{
+			call Leds.led1On();
+		}
+    signal Send.sendDone( m_msg, SUCCESS );
+		return SUCCESS;
+    //return send( p_msg, useCca );
   }
 
   async command error_t Send.resend(bool useCca) {
@@ -524,11 +576,9 @@ implementation {
       m_msg = p_msg;
       totalCcaChecks = 0;
     }
-    
     if ( acquireSpiResource() == SUCCESS ) {
       loadTXFIFO();
     }
-
     return SUCCESS;
   }
   
@@ -566,7 +616,6 @@ implementation {
 #ifdef CC1200_HW_SECURITY
 
   task void waitTask(){
-    call Leds.led2Toggle();
     if(SECURITYLOCK == 1){
       post waitTask();
     }else{
@@ -620,7 +669,6 @@ implementation {
 	mode = CC1200_NO_SEC;
 	micLength = 4;
       }else if (secHdr->secLevel == CBC_MAC_4){
-	//	call Leds.led0Toggle();
 	mode = CC1200_CBC_MAC;
 	micLength = 4;
       }else if (secHdr->secLevel == CBC_MAC_8){
@@ -630,7 +678,6 @@ implementation {
 	mode = CC1200_CBC_MAC;
 	micLength = 16;
       }else if (secHdr->secLevel == CTR){
-	//	call Leds.led1Toggle();
 	mode = CC1200_CTR;
 	micLength = 4;
       }else if (secHdr->secLevel == CCM_4){
@@ -785,7 +832,6 @@ implementation {
    * the same CRC polynomial as the CC1200's AUTOCRC functionality.
    */
 
-	uint8_t sendbyte[10]= {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   void loadTXFIFO() {
     cc1200_header_t* header = call CC1200PacketBody.getHeader( m_msg );
     uint8_t tx_power = (call CC1200PacketBody.getMetadata( m_msg ))->tx_power;
@@ -793,9 +839,6 @@ implementation {
     if ( !tx_power ) {
       tx_power = CC1200_DEF_RFPOWER;
     }
-    //call CSN.clr();
-    //call TXFIFO.write( sendbyte, 10);
-    //call CSN.set();
 		/* 
     call CSN.clr();
     

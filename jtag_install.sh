@@ -18,7 +18,7 @@ elif [ $1 -lt 0 ] || [ $1 -ge 65535 ] ; then
 	usage
 else
 
-make telosz reinstall.$1 bsl,99
+make telosz install.$1 bsl,99
 cp build/telosz/main.ihex.out-$1 build/telosz/main.txt
 ~/MSP430Flasher_1.3.7/MSP430Flasher -w "./build/telosz/main.txt" -v -g -z [VCC=3300]
 

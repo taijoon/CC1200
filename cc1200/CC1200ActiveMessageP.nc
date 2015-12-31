@@ -61,21 +61,22 @@ implementation {
       ( IEEE154_ADDR_SHORT << IEEE154_FCF_SRC_ADDR_MODE ) ;
     header->length = len + CC1200_SIZE;
     
-    if (call RadioResource.immediateRequest() == SUCCESS) {
-      error_t rc;
-      signal SendNotifier.aboutToSend[id](addr, msg);
+    //if (call RadioResource.immediateRequest() == SUCCESS) {
+      //error_t rc = SUCCESS;
+      //signal SendNotifier.aboutToSend[id](addr, msg);
       
-      rc = call SubSend.send( msg, len );
-      if (rc != SUCCESS) {
-        call RadioResource.release();
-      }
+      call SubSend.send( msg, len );
+      //rc = call SubSend.send( msg, len );
+      //if (rc != SUCCESS) {
+        //call RadioResource.release();
+      //}
 
-      return rc;
-    } else {
-      pending_length  = len;
-      pending_message = msg;
-      return call RadioResource.request();
-    }
+      //return rc;
+    //} else {
+      //pending_length  = len;
+      //pending_message = msg;
+      //return call RadioResource.request();
+    //}
   }
 
   command error_t AMSend.cancel[am_id_t id](message_t* msg) {

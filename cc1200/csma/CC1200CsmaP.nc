@@ -85,37 +85,37 @@ implementation {
   }
 
   command error_t Send.send( message_t* p_msg, uint8_t len ) {
-    cc1200_header_t* header = call CC1200PacketBody.getHeader( p_msg );
-    cc1200_metadata_t* metadata = call CC1200PacketBody.getMetadata( p_msg );
+//    cc1200_header_t* header = call CC1200PacketBody.getHeader( p_msg );
+//    cc1200_metadata_t* metadata = call CC1200PacketBody.getMetadata( p_msg );
 
     atomic {
-      if (!call SplitControlState.isState(S_STARTED)) {
-        return FAIL;
-      }
+//      if (!call SplitControlState.isState(S_STARTED)) {
+//        return FAIL;
+//      }
       
-      call SplitControlState.forceState(S_TRANSMITTING);
-      m_msg = p_msg;
+//      call SplitControlState.forceState(S_TRANSMITTING);
+//      m_msg = p_msg;
     }
 
     // header->length = len + CC1200_SIZE;
 #ifdef CC1200_HW_SECURITY
-    header->fcf &= ((1 << IEEE154_FCF_ACK_REQ)|
-                    (1 << IEEE154_FCF_SECURITY_ENABLED)|
-                    (0x3 << IEEE154_FCF_SRC_ADDR_MODE) |
-                    (0x3 << IEEE154_FCF_DEST_ADDR_MODE));
+//    header->fcf &= ((1 << IEEE154_FCF_ACK_REQ)|
+//                    (1 << IEEE154_FCF_SECURITY_ENABLED)|
+//                    (0x3 << IEEE154_FCF_SRC_ADDR_MODE) |
+//                    (0x3 << IEEE154_FCF_DEST_ADDR_MODE));
 #else
-    header->fcf &= ((1 << IEEE154_FCF_ACK_REQ) | 
-                    (0x3 << IEEE154_FCF_SRC_ADDR_MODE) |
-                    (0x3 << IEEE154_FCF_DEST_ADDR_MODE));
+//    header->fcf &= ((1 << IEEE154_FCF_ACK_REQ) | 
+//                    (0x3 << IEEE154_FCF_SRC_ADDR_MODE) |
+//                    (0x3 << IEEE154_FCF_DEST_ADDR_MODE));
 #endif
-    header->fcf |= ( ( IEEE154_TYPE_DATA << IEEE154_FCF_FRAME_TYPE ) |
-		     ( 1 << IEEE154_FCF_INTRAPAN ) ); 
+//    header->fcf |= ( ( IEEE154_TYPE_DATA << IEEE154_FCF_FRAME_TYPE ) |
+//		     ( 1 << IEEE154_FCF_INTRAPAN ) ); 
 
-    metadata->ack = FALSE;
-    metadata->rssi = 0;
-    metadata->lqi = 0;
+//    metadata->ack = FALSE;
+//    metadata->rssi = 0;
+//    metadata->lqi = 0;
     //metadata->timesync = FALSE;
-    metadata->timestamp = CC1200_INVALID_TIMESTAMP;
+//    metadata->timestamp = CC1200_INVALID_TIMESTAMP;
 
 /* Edited by TJ
     ccaOn = TRUE;

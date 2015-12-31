@@ -31,7 +31,7 @@ implementation
   OscilloscopeC.Timer2 -> SEC.Timer;
   OscilloscopeC.Leds -> LedsC;
   OscilloscopeC.AMSend -> AMSenderC;
-  OscilloscopeC.Receive -> AMReceiverC;
+  //OscilloscopeC.Receive -> AMReceiverC;
 
 	components HplMsp430GeneralIOC as MSP430IOC;
 	OscilloscopeC.P61 -> MSP430IOC.Port61;
