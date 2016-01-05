@@ -158,6 +158,7 @@ generic configuration CC1200SpiC() {
   provides interface CC1200Register as XOSC2;
   provides interface CC1200Register as XOSC1;
 
+  provides interface CC1200Register as NUM_RXBYTES;
   // ram
   provides interface CC1200Ram as IEEEADR;
   provides interface CC1200Ram as PANID;
@@ -343,6 +344,7 @@ implementation {
   XOSC2 = Spi.Reg[ CC120X_XOSC2 ];
   XOSC1 = Spi.Reg[ CC120X_XOSC1 ];
 
+  NUM_RXBYTES = Spi.Reg[ CC120X_NUM_RXBYTES ];
 
   // ram
   IEEEADR = Spi.Ram[ CC1200_RAM_IEEEADR ];

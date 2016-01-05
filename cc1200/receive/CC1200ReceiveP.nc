@@ -34,6 +34,10 @@ module CC1200ReceiveP @safe() {
   uses interface CC1200Ram as RXFIFO_RAM;
   uses interface CC1200Strobe as SNOP;
 
+	// Create by TJ
+  uses interface CC1200Strobe as SRX;
+  uses interface CC1200Strobe as SFRX;
+  uses interface CC1200Register as NUM_RXBYTES;
   uses interface Leds;
 }
 
@@ -170,11 +174,29 @@ implementation {
   
   
   /***************** InterruptFIFOP Events ****************/
+	uint16_t readReg = 0;
+	uint8_t rxbuff[128];
   async event void InterruptFIFOP.fired() {
+    call CSN.clr();		call NUM_RXBYTES.read(&readReg);    call CSN.set();
+		if(readReg == 0){
+			// readReg ==0 mean is TX Done
+			// then RF Mode is chan RX Mode
+			call Leds.led1Toggle();
+			call CSN.clr();
+  		call SRX.strobe();
+			call CSN.set();
+		}
+		else {
+			call Leds.led2Toggle();
+			call CSN.clr();
+			call RXFIFO.beginRead(rxbuff, readReg);
+			call CSN.set();
+		}
+		
     if ( m_state == S_STARTED ) {
 #ifndef CC1200_HW_SECURITY
       m_state = S_RX_LENGTH;
-      beginReceive();
+      //beginReceive();
 #else
       m_state = S_RX_DEC;
       atomic receivingPacket = TRUE;

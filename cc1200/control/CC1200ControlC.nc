@@ -53,6 +53,7 @@ implementation {
 	// TJ ADD
   CC1200ControlP.SRES -> Spi.SRES;
   CC1200ControlP.SFSTXON -> Spi.SFSTXON;
+  CC1200ControlP.SRX -> Spi.SRX;
 
   CC1200ControlP.IOCFG3  -> Spi.IOCFG3;
   CC1200ControlP.IOCFG2  -> Spi.IOCFG2;

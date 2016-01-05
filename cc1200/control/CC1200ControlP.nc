@@ -36,6 +36,7 @@ module CC1200ControlP @safe() {
 
 	// TJ ADD
   uses interface CC1200Strobe as SRES;
+  uses interface CC1200Strobe as SRX;
   uses interface CC1200Strobe as SFSTXON;
 
   uses interface CC1200Register as IOCFG3;
@@ -318,6 +319,7 @@ implementation {
     call CSN.clr();		call PKT_LEN.write(0xFF);    call CSN.set();
 
 		// Register Read
+		//uint16_t readReg = 0;
     //call CSN.clr();		call PKT_LEN.read(&readReg);    call CSN.set();
 		//if(readReg != 0x00FF)		call Leds.led1Off();
 		//else		readReg = 0;
@@ -348,7 +350,9 @@ implementation {
     call CSN.clr();		call XOSC5.write(0x0E);    call CSN.set();
     call CSN.clr();		call XOSC1.write(0x03);    call CSN.set();
     }
-		//signal InterruptCCA.fired();
+		signal InterruptCCA.fired();
+
+    //signal CC1200Power.startOscillatorDone();
 		//call CC1200Power.startDone();
 		return SUCCESS;
   }
@@ -369,7 +373,9 @@ implementation {
       if ( m_state != S_XOSC_STARTED ) {
         return FAIL;
       }
-      call SRXON.strobe();
+    	call CSN.clr();
+      call SRX.strobe();
+			call CSN.set();
     }
     return SUCCESS;
   }
@@ -379,7 +385,7 @@ implementation {
       if ( m_state != S_XOSC_STARTED ) {
         return FAIL;
       }
-      call SRFOFF.strobe();
+      //call SRFOFF.strobe();
     }
     return SUCCESS;
   }

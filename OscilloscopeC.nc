@@ -26,7 +26,7 @@ module OscilloscopeC @safe()
     interface Timer<TMilli> as Timer2;
     interface Leds;
     interface AMSend;
-//    interface Receive;
+    interface Receive;
 
 		interface HplMsp430GeneralIO as P61;
 }
@@ -74,13 +74,13 @@ implementation
 
   event void RadioControl.stopDone(error_t error) {
   }
-/*
+
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len) {
     //oscilloscope_t *omsg = payload;
     report_received();
     return msg;
   }
-*/
+
   /* At each sample period:
      - if local sample buffer is full, send accumulated samples
      - read next sample

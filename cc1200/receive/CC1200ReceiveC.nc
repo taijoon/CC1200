@@ -41,6 +41,11 @@ implementation {
   CC1200ReceiveP.PacketTimeStamp -> CC1200PacketC;
   CC1200ReceiveP.CC1200Config -> CC1200ControlC;
 
+	// Create by TJ
+  CC1200ReceiveP.SRX -> Spi.SRX;
+  CC1200ReceiveP.SFRX -> Spi.SFRX;
+  CC1200ReceiveP.NUM_RXBYTES -> Spi.NUM_RXBYTES;
+
   CC1200ReceiveP.SECCTRL0 -> Spi.SECCTRL0;
   CC1200ReceiveP.SECCTRL1 -> Spi.SECCTRL1;
   CC1200ReceiveP.SRXDEC -> Spi.SRXDEC;
@@ -49,5 +54,4 @@ implementation {
   CC1200ReceiveP.KEY1 -> Spi.KEY1;
   CC1200ReceiveP.RXFIFO_RAM -> Spi.RXFIFO_RAM;
   CC1200ReceiveP.SNOP -> Spi.SNOP;
-
 }

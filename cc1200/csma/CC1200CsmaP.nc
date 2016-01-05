@@ -222,7 +222,7 @@ implementation {
   task void startDone_task() {
     call SubControl.start();
     call CC1200Power.rxOn();
-    call Resource.release();
+//    call Resource.release();
     call SplitControlState.forceState(S_STARTED);
     signal SplitControl.startDone( SUCCESS );
   }

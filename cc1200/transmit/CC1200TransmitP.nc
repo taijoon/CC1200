@@ -176,7 +176,6 @@ implementation {
 	uint16_t txSeq = 0;
   async command error_t Send.send( message_t* ONE p_msg, bool useCca ) {
 		uint8_t chip_status = 0;
-		call Leds.led2Toggle();
 
 		atomic{
 		txBuffer[1] = txSeq >> 8;
@@ -197,10 +196,6 @@ implementation {
 	    call CSN.clr();
 			call SFTX.strobe();
     	call CSN.set();
-			call Leds.led1Off();
-		}
-		else{
-			call Leds.led1On();
 		}
     signal Send.sendDone( m_msg, SUCCESS );
 		return SUCCESS;

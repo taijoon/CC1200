@@ -150,14 +150,24 @@ implementation {
   async command cc1200_status_t Fifo.beginRead[ uint8_t addr ]( uint8_t* data, 
                                                                 uint8_t len ) {
     cc1200_status_t status = 0;
-   /* 
-
+		uint8_t w_len = 0;
+    
     atomic {
       if(call WorkingState.isIdle()) {
         return status;
       }
     }
     
+		status = call SpiByte.write( addr );
+    
+		while(w_len < len){
+			data[w_len++] = call SpiByte.write(0x3D);
+		}
+    return status;
+
+
+   /* 
+
     m_addr = addr | 0x40;
         
     status = call SpiByte.write( m_addr );
