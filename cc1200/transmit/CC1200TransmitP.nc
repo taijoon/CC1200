@@ -176,16 +176,25 @@ implementation {
 	uint16_t txSeq = 0;
   async command error_t Send.send( message_t* ONE p_msg, bool useCca ) {
 		uint8_t chip_status = 0;
+    cc1200_header_t* header = call CC1200PacketBody.getHeader( p_msg );
+    uint8_t tmpLen = sizeof(cc1200_header_t);
+    //uint8_t tmpLen __DEPUTY_UNUSED__ = header->length - 1;
 
 		atomic{
 		txBuffer[1] = txSeq >> 8;
 		txBuffer[2] = txSeq & 0xff;
+		txBuffer[3] = 0x7e;
+		txBuffer[4] = 0x45;
 		txSeq++;
 		}
     call CSN.clr();
-    call TXFIFO.write( txBuffer, 21);
     //call TXFIFO.write( p_msg, sizeof (message_t));
-    call CSN.set();
+    //call TXFIFO.write(TCAST(uint8_t * COUNT(tmpLen), header), header->length - 1);
+		{
+		memcpy(&txBuffer[5], header, tmpLen);
+    call TXFIFO.write(txBuffer, 21);
+    }
+		call CSN.set();
 
     call CSN.clr();
 		chip_status = call STX.strobe();

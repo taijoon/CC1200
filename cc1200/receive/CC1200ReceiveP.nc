@@ -38,6 +38,7 @@ module CC1200ReceiveP @safe() {
   uses interface CC1200Strobe as SRX;
   uses interface CC1200Strobe as SFRX;
   uses interface CC1200Register as NUM_RXBYTES;
+  uses interface CC1200Register as MARCSTATE;
   uses interface Leds;
 }
 
@@ -177,25 +178,62 @@ implementation {
 	uint16_t readReg = 0;
 	uint8_t rxbuff[128];
   async event void InterruptFIFOP.fired() {
+    call CSN.clr();		call MARCSTATE.read(&readReg);    call CSN.set();
+		if((readReg & 0x1F) == 0x01){
+    	call CSN.clr();		call NUM_RXBYTES.read(&readReg);    call CSN.set();
+			if(readReg == 0){
+				call Leds.led1Toggle();
+				call CSN.clr();
+  			call SRX.strobe();
+				call CSN.set();
+			}
+			else if(readReg == 0x11){
+				call CSN.clr();
+  			call SFRX.strobe();
+				call CSN.set();
+				call CSN.clr();
+  			call SRX.strobe();
+				call CSN.set();
+			}
+			else{
+				call CSN.clr();
+				call RXFIFO.beginRead(rxbuff, readReg);
+				call CSN.set();
+				call CSN.clr();
+  			call SRX.strobe();
+				call CSN.set();
+				if(rxbuff[readReg-3] == 0x4a)
+					call Leds.led2Toggle();
+			}
+		}
+/*
     call CSN.clr();		call NUM_RXBYTES.read(&readReg);    call CSN.set();
 		if(readReg == 0){
 			// readReg ==0 mean is TX Done
 			// then RF Mode is chan RX Mode
-			call Leds.led1Toggle();
 			call CSN.clr();
   		call SRX.strobe();
 			call CSN.set();
 		}
 		else {
-			call Leds.led2Toggle();
-			call CSN.clr();
-			call RXFIFO.beginRead(rxbuff, readReg);
-			call CSN.set();
+    	call CSN.clr();		call MARCSTATE.read(&readReg);    call CSN.set();
+			if((readReg & 0x1F) == 0x11){
+				call Leds.led1Toggle();
+				call CSN.clr();
+  			call SFRX.strobe();
+				call CSN.set();
+			}
+			else{
+				call Leds.led2Toggle();
+				call CSN.clr();
+				call RXFIFO.beginRead(rxbuff, readReg);
+				call CSN.set();
+			}
 		}
 		
     if ( m_state == S_STARTED ) {
 #ifndef CC1200_HW_SECURITY
-      m_state = S_RX_LENGTH;
+      //m_state = S_RX_LENGTH;
       //beginReceive();
 #else
       m_state = S_RX_DEC;
@@ -205,6 +243,7 @@ implementation {
     } else {
       m_missed_packets++;
     }
+*/
   }
 
   /*****************Decryption Options*********************/

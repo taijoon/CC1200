@@ -45,6 +45,7 @@ implementation {
   CC1200ReceiveP.SRX -> Spi.SRX;
   CC1200ReceiveP.SFRX -> Spi.SFRX;
   CC1200ReceiveP.NUM_RXBYTES -> Spi.NUM_RXBYTES;
+  CC1200ReceiveP.MARCSTATE -> Spi.MARCSTATE;
 
   CC1200ReceiveP.SECCTRL0 -> Spi.SECCTRL0;
   CC1200ReceiveP.SECCTRL1 -> Spi.SECCTRL1;
