@@ -35,4 +35,8 @@ implementation
 
 	components HplMsp430GeneralIOC as MSP430IOC;
 	OscilloscopeC.P61 -> MSP430IOC.Port61;
+
+  components PlatformSerialC as UART;
+  OscilloscopeC.SerialControl -> UART.StdControl;
+  OscilloscopeC.UartStream -> UART.UartStream;	
 }

@@ -188,6 +188,7 @@ implementation {
 				call CSN.set();
 			}
 			else if(readReg == 0x11){
+				// RX FIFO ERROR
 				call CSN.clr();
   			call SFRX.strobe();
 				call CSN.set();
@@ -202,7 +203,8 @@ implementation {
 				call CSN.clr();
   			call SRX.strobe();
 				call CSN.set();
-				if(rxbuff[readReg-3] == 0x4a)
+				//if(rxbuff[readReg-3] == 0x4f)
+				if(rxbuff[2] == 0x41)
 					call Leds.led2Toggle();
 			}
 		}
