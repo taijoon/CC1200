@@ -103,9 +103,10 @@ implementation
 		}
 	}
 
+	uint8_t IR[] = "AAA\n\r";
   event void Timer.fired() {
 		call Leds.led0Toggle();
-		call UartStream.send("AAA\n\r", 6);
+		call UartStream.send(IR, 6);
 //	    memcpy(call AMSend.getPayload(&sendBuf, sizeof(local)), &local, sizeof local);
 //	    if (call AMSend.send(AM_BROADCAST_ADDR, &sendBuf, sizeof local) == SUCCESS)
 //	      sendBusy = TRUE;

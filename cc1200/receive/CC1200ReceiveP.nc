@@ -178,6 +178,7 @@ implementation {
 	uint16_t readReg = 0;
 	uint8_t rxbuff[128];
   async event void InterruptFIFOP.fired() {
+    cc1200_header_t* header = call CC1200PacketBody.getHeader( m_p_rx_buf );
     call CSN.clr();		call MARCSTATE.read(&readReg);    call CSN.set();
 		if((readReg & 0x1F) == 0x01){
     	call CSN.clr();		call NUM_RXBYTES.read(&readReg);    call CSN.set();
@@ -194,10 +195,11 @@ implementation {
 				call CSN.clr();
   			call SRX.strobe();
 				call CSN.set();
-				//if(rxbuff[readReg-3] == 0x4f)
-				//if(rxbuff[0] == 0x17)
-					call Leds.led2Toggle();
-      	//signal Receive.receive( m_p_rx_buf, m_p_rx_buf->data, length - CC1200_SIZE);
+				//memcpy(header, &rxbuff[1], sizeof(cc1200_header_t));
+				memcpy(header, &rxbuff[1], readReg);
+				//if(header->length == 0x17)
+				//	call Leds.led2Toggle();
+				post receiveDone_task();
 			}
 		}
   }
@@ -658,6 +660,8 @@ implementation {
     uint8_t tmpLen __DEPUTY_UNUSED__ = sizeof(message_t) - (offsetof(message_t, data) - sizeof(cc1200_header_t));
     uint8_t* COUNT(tmpLen) buf = TCAST(uint8_t* COUNT(tmpLen), header);
 
+		if(length == 0x17)
+			call Leds.led2Toggle();
     metadata->crc = buf[ length ] >> 7;
     metadata->lqi = buf[ length ] & 0x7f;
     metadata->rssi = buf[ length - 1 ];
