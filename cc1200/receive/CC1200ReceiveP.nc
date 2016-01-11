@@ -187,15 +187,6 @@ implementation {
   			call SRX.strobe();
 				call CSN.set();
 			}
-			else if(readReg == 0x11){
-				// RX FIFO ERROR
-				call CSN.clr();
-  			call SFRX.strobe();
-				call CSN.set();
-				call CSN.clr();
-  			call SRX.strobe();
-				call CSN.set();
-			}
 			else{
 				call CSN.clr();
 				call RXFIFO.beginRead(rxbuff, readReg);
@@ -204,48 +195,11 @@ implementation {
   			call SRX.strobe();
 				call CSN.set();
 				//if(rxbuff[readReg-3] == 0x4f)
-				if(rxbuff[2] == 0x41)
+				//if(rxbuff[0] == 0x17)
 					call Leds.led2Toggle();
+      	//signal Receive.receive( m_p_rx_buf, m_p_rx_buf->data, length - CC1200_SIZE);
 			}
 		}
-/*
-    call CSN.clr();		call NUM_RXBYTES.read(&readReg);    call CSN.set();
-		if(readReg == 0){
-			// readReg ==0 mean is TX Done
-			// then RF Mode is chan RX Mode
-			call CSN.clr();
-  		call SRX.strobe();
-			call CSN.set();
-		}
-		else {
-    	call CSN.clr();		call MARCSTATE.read(&readReg);    call CSN.set();
-			if((readReg & 0x1F) == 0x11){
-				call Leds.led1Toggle();
-				call CSN.clr();
-  			call SFRX.strobe();
-				call CSN.set();
-			}
-			else{
-				call Leds.led2Toggle();
-				call CSN.clr();
-				call RXFIFO.beginRead(rxbuff, readReg);
-				call CSN.set();
-			}
-		}
-		
-    if ( m_state == S_STARTED ) {
-#ifndef CC1200_HW_SECURITY
-      //m_state = S_RX_LENGTH;
-      //beginReceive();
-#else
-      m_state = S_RX_DEC;
-      atomic receivingPacket = TRUE;
-      beginDec();
-#endif
-    } else {
-      m_missed_packets++;
-    }
-*/
   }
 
   /*****************Decryption Options*********************/
