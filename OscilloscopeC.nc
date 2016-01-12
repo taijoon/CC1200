@@ -29,8 +29,10 @@ module OscilloscopeC @safe()
     interface Receive;
 
 		interface HplMsp430GeneralIO as P61;
-    interface StdControl as SerialControl;
-		interface UartStream;
+    //interface StdControl as SerialControl;
+		//interface UartStream;
+    interface SplitControl as SerialControl;
+    interface AMSend as SerialSend;
 	}
 }
 implementation
@@ -79,10 +81,21 @@ implementation
   event void RadioControl.stopDone(error_t error) {
   }
 
+  event void SerialControl.startDone(error_t error) {
+  }
+
+  event void SerialControl.stopDone(error_t error) {
+  }
+
+  uint8_t recv[128];
+	message_t uartbuf;
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len) {
     oscilloscope_t *omsg = payload;
-		if(omsg->readings[0] == 0x1155)
-    	report_received();
+    report_received();
+
+		memcpy(&uartbuf, msg, sizeof(message_t));
+    call SerialSend.send(0xffff, &uartbuf, sizeof(oscilloscope_t));
+		//call UartStream.send(&recv, sizeof(message_t));
     return msg;
   }
 
@@ -107,7 +120,6 @@ implementation
 	uint8_t IR[] = "AAA\n\r";
   event void Timer.fired() {
 		call Leds.led0Toggle();
-		call UartStream.send(IR, 6);
 //	    memcpy(call AMSend.getPayload(&sendBuf, sizeof(local)), &local, sizeof local);
 //	    if (call AMSend.send(AM_BROADCAST_ADDR, &sendBuf, sizeof local) == SUCCESS)
 //	      sendBusy = TRUE;
@@ -137,7 +149,7 @@ implementation
 
     sendBusy = FALSE;
   }
-
+/*
   async event void UartStream.receivedByte( uint8_t byte ) {
 	}
 
@@ -145,5 +157,8 @@ implementation
 	}
 
   async event void UartStream.receiveDone( uint8_t* buf, uint16_t len, error_t error ) {
+	}
+*/
+  event void SerialSend.sendDone(message_t *msg, error_t error) {
 	}
 }
