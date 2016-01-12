@@ -53,7 +53,7 @@ implementation
   // Use LEDs to report various status issues.
   void report_problem() { call Leds.led0Toggle(); }
   void report_sent() { call Leds.led1Toggle(); }
-	void report_received() {;}
+	void report_received() { call Leds.led2Toggle();}
 
   void startTimer() {
     call Timer.startPeriodic(local.interval);
@@ -80,8 +80,9 @@ implementation
   }
 
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len) {
-    //oscilloscope_t *omsg = payload;
-    report_received();
+    oscilloscope_t *omsg = payload;
+		if(omsg->readings[0] == 0x1155)
+    	report_received();
     return msg;
   }
 

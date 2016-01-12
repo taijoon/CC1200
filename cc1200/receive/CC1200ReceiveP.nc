@@ -195,11 +195,17 @@ implementation {
 				call CSN.clr();
   			call SRX.strobe();
 				call CSN.set();
-				//memcpy(header, &rxbuff[1], sizeof(cc1200_header_t));
 				memcpy(header, &rxbuff[1], readReg);
-				//if(header->length == 0x17)
-				//	call Leds.led2Toggle();
-				post receiveDone_task();
+
+//      	if ( ( buf[ rxFrameLength ] >> 7 ) && rx_buf ) {
+				{
+        	uint8_t type = ( header->fcf >> IEEE154_FCF_FRAME_TYPE ) & 7;
+	        signal CC1200Receive.receive( type, m_p_rx_buf );
+  	      if ( type == IEEE154_TYPE_DATA ) {
+    	      post receiveDone_task();
+      	    return;
+        	}
+	      }
 			}
 		}
   }
@@ -660,8 +666,6 @@ implementation {
     uint8_t tmpLen __DEPUTY_UNUSED__ = sizeof(message_t) - (offsetof(message_t, data) - sizeof(cc1200_header_t));
     uint8_t* COUNT(tmpLen) buf = TCAST(uint8_t* COUNT(tmpLen), header);
 
-		if(length == 0x17)
-			call Leds.led2Toggle();
     metadata->crc = buf[ length ] >> 7;
     metadata->lqi = buf[ length ] & 0x7f;
     metadata->rssi = buf[ length - 1 ];
