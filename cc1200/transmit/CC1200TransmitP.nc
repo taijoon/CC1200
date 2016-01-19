@@ -210,6 +210,11 @@ implementation {
 			call SFTX.strobe();
     	call CSN.set();
 		}
+
+
+    if ( call CCA.get() == 0 ) {
+			call Leds.led2Toggle();
+		}
     signal Send.sendDone( m_msg, SUCCESS );
 		return SUCCESS;
     //return send( p_msg, useCca );

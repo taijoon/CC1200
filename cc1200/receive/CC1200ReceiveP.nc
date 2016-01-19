@@ -183,7 +183,6 @@ implementation {
 		if((readReg & 0x1F) == 0x01){
     	call CSN.clr();		call NUM_RXBYTES.read(&readReg);    call CSN.set();
 			if(readReg == 0){
-				call Leds.led1Toggle();
 				call CSN.clr();
   			call SRX.strobe();
 				call CSN.set();

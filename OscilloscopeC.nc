@@ -54,7 +54,7 @@ implementation
 
   // Use LEDs to report various status issues.
   void report_problem() { call Leds.led0Toggle(); }
-  void report_sent() { call Leds.led1Toggle(); }
+  void report_sent() {}// call Leds.led1Toggle(); }
 	void report_received() { call Leds.led2Toggle();}
 
   void startTimer() {
