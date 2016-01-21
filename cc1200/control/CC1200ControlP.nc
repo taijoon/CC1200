@@ -315,6 +315,7 @@ implementation {
     call CSN.clr();		call AGC_CFG0.write(0x87);    call CSN.set();
     call CSN.clr();		call FIFO_CFG.write(0x00);    call CSN.set();
     call CSN.clr();		call FS_CFG.write(0x12);    call CSN.set();
+
     call CSN.clr();		call PKT_CFG2.write(0x00);    call CSN.set();
     call CSN.clr();		call PKT_CFG0.write(0x20);    call CSN.set();
     call CSN.clr();		call PKT_LEN.write(0xFF);    call CSN.set();
