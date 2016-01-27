@@ -296,7 +296,7 @@ implementation {
     atomic {
 
 		// Register Write
-    call CSN.clr();		call IOCFG1.write(0x000F);		call CSN.set();
+    call CSN.clr();		call IOCFG3.write(0x000F);		call CSN.set();
     call CSN.clr();		call IOCFG2.write(0x0006);		call CSN.set();
     call CSN.clr();		call DEVIATION_M.write(0x00D1);    call CSN.set();
     call CSN.clr();		call MODCFG_DEV_E.write(0x0000);    call CSN.set();

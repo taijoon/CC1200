@@ -211,7 +211,6 @@ implementation {
     	call CSN.set();
 		}
 
-
     if ( call CCA.get() == 0 ) {
 			call Leds.led2Toggle();
 		}

@@ -178,14 +178,15 @@ implementation {
 	uint16_t readReg = 0;
 	uint8_t rxbuff[128];
   async event void InterruptFIFOP.fired() {
+		// Edited by TJ
     cc1200_header_t* header = call CC1200PacketBody.getHeader( m_p_rx_buf );
     call CSN.clr();		call MARCSTATE.read(&readReg);    call CSN.set();
 		if((readReg & 0x1F) == 0x01){
     	call CSN.clr();		call NUM_RXBYTES.read(&readReg);    call CSN.set();
 			if(readReg == 0){
-				call CSN.clr();
-  			call SRX.strobe();
-				call CSN.set();
+				//call CSN.clr();
+  			//call SRX.strobe();
+				//call CSN.set();
 			}
 			else{
 				call CSN.clr();
