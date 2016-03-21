@@ -4,7 +4,7 @@ Change 2420 -> 1200
 
 
 Compile cmd :
-	make telosz
+	make telosb
 
 CMD flow : 
 	Create main.ihex -> cp main.txt -> Flasher fusing 
